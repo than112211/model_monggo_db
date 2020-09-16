@@ -3,7 +3,13 @@ const URI ="mongodb+srv://admin:admin@cluster0.crree.mongodb.net/ledocinema?retr
 async function connect(){
 
     try {
-        await mongoose.connect(URI);
+        await mongoose.connect(URI,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true
+           
+        });
         console.log('thanh cong')
         
     } catch (error) {

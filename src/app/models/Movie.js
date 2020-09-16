@@ -13,4 +13,4 @@ const Movie= new Schema({
     createAt:{type:Date,default: Date.now},
     updateAt:{type:Date,default: Date.now}
   });
-  module.exports= mongoose.model('movieschema', Movie);
+  module.exports= mongoose.model('movie', Movie);
