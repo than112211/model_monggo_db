@@ -7,6 +7,7 @@ const Ticket = Schema({
     movie:String,
     seat:[String],
     price:Number,
+    code_gift:String,
     createOn:{type:Date,default: Date.now}
   });
   module.exports= mongoose.model('ticket', Ticket);
