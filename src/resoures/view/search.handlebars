@@ -1,0 +1,24 @@
+<div class="mt-4">
+  {{!--  thẻ form mặc đinh phương thức GET và có thể chỉ đinh 1 phương thức khác --}}
+  {{!-- submit với method GET va action( thay dổi url) --}}
+
+{{!-- <form method="GET" action="/news"></form> --}}
+<form method="POST">
+  <div class="form-group">
+    <label for="search-input">Từ khóa</label>
+    <input type="text" name="q" class="form-control" id="exampleInputEmail1" placeholder="Nhập từ khóa">
+  </div>
+
+ <div class="form-group">
+   {{!-- khi chọn giới tính thì dữ liệu đc lưu (name) gender = male hoặc female --}}
+    <label for="gender-input">Gioi tính</label>
+    <select  name="gender" class="form-control" id="gender-input">
+    <option value="">Chọn giới tính</option>
+    <option value="male"> Nam</option>
+    <option value="female"> Nữ</option> 
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+</form>
+</div>

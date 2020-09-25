@@ -1,0 +1,20 @@
+<div class="mt-4">
+    <div class="row">
+        {{!--  diêm bat dau lặp --}}
+        {{#each movietest}}
+        <div class="col-sm-6 col-lg-4">
+
+            <div class="card card-movie-item">
+            <img width="250" height="300" src="{{this.image}}" class="card-img-top img" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{this.name}}</h5>
+                <p class="card-text">{{this.type}}</p>
+                <a href="#" class="btn btn-primary">Mua vé</a>                 
+                <a href="/movie/{{this.slug}}" class="btn btn-primary">Chi tiết</a>
+            </div>
+            </div>
+        </div>
+        {{/each}}
+        {{!--  điểm kết thúc --}}
+    </div>
+</div>
