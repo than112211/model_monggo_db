@@ -3,9 +3,9 @@ const router =express.Router();
 const newControllers= require('../app/controllers/NewsController');
 
 // :chitiet la cac trang chi tiet dang sau
-router.use('/:chitiet',newControllers.show);
+router.get('/:slug',newControllers.show);
 
-router.use('/',newControllers.index);
+router.get('/',newControllers.index);
 
 
 

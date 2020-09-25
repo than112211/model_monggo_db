@@ -27,7 +27,8 @@ app.engine('handlebars', exphbs({
   extname:'handlebars'
 }));
 app.set('view engine', 'handlebars');
-app.set('views',path.join(__dirname,'resoures/view'))
+// dẫn path tới file view
+app.set('views',path.join(__dirname,'resoures','view'))
 
 route(app); // khởi tạo route
 //  request là những yêu cầu mà ng dùng gữi đi
@@ -36,6 +37,6 @@ route(app); // khởi tạo route
 // phương thức post là gữi dữ liệu từ client lên sever        / khi submit thì dữ liệu ẩn có biến là name"""
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`app listening at http://localhost:${port}`)
 })
 // run code = node + trang can runnod.
