@@ -1,0 +1,45 @@
+<div class="mt-4">
+    <h1>CHỈNH SỬA NỘI DUNG PHIM</h1>
+    {{!-- post đùng để gữi dữ liệu đi  PUT dùng để sữa dữ liệu --}}
+    {{!--  từ post dùng method-override để sever điều hướng sang PUT --}}
+    <form method="POST" action="/movie/{{movieedit._id}}?_method=PUT">
+  <div class="form-group">
+    <label for="name"> Tên phim</label>
+    <input type="text" class="form-control" value="{{movieedit.name}}" id="name" name="name" >
+  </div>
+  <div class="form-group">
+    <label for="description">Mô tả</label>
+    <textarea  class="form-control" id="description" name="description"> {{movieedit.description}}</textarea>
+  </div>
+  <div class="form-group">
+    <label for="trailer">Trailer</label>
+    <input type="text" class="form-control"  value="{{movieedit.trailer}}" id="trailer" name="trailer" >
+  </div>
+  <div class="form-group">
+    <label for="director">Đạo diễn</label>
+    <input type="text" class="form-control"  value="{{movieedit.director}}" id="director" name="director" >
+  </div>
+  <div class="form-group">
+    <label for="actor"> Diễn viên</label>
+    <input type="text" class="form-control"  value="{{movieedit.actor}}" id="actor" name="actor" >
+  </div>
+  <div class="form-group">
+    <label for="type">Thể loại</label>
+    <input type="text" class="form-control"  value="{{movieedit.type}}" id="type"name="type" >
+  </div>
+  <div class="form-group">
+    <label for="length">Độ dài phim</label>
+    <input type="text" class="form-control"  value="{{movieedit.length}}" id="length"name="length" >
+  </div>
+  <div class="form-group">
+    <label for="language">Ngôn ngữ</label>
+    <input type="text" class="form-control"  value="{{movieedit.language}}" id="language"name="language" >
+  </div>
+  <div class="form-group">
+    <label for="rating">Đánh giá</label>
+    <input type="text" class="form-control"  value="{{movieedit.rating}}" id="rating"name="rating" >
+  </div>
+  
+  <button type="submit" class="btn btn-primary">Lưu</button>
+</form>
+</div>

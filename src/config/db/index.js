@@ -21,7 +21,7 @@ async function connect(){
            
         });
     // await client.connect();
-        console.log('thanh cong')
+        console.log(' Monggoo connected')
         
     } catch (error) {
         console.log('that bai')

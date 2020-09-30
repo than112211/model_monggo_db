@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const slug = require('mongoose-slug-generator');
+mongoose.plugin(slug);
+
 const Schema = mongoose.Schema;
 
 const Movie= new Schema({
@@ -13,5 +16,7 @@ const Movie= new Schema({
     length:Number,
     language:String,
     rating: Number,
+    // tạo slug thông qua name 
+    slug: { type: String, slug: 'name',unique: true }
   });
-  module.exports= mongoose.model('movie', Movie);
+  module.exports= mongoose.model('Movie', Movie);

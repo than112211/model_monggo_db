@@ -22,15 +22,15 @@
     "url": "https://github.com/than112211/model_monggo_db/issues"
   },
   "homepage": "https://github.com/than112211/model_monggo_db#readme",
-  
-    "lint-staged": {
-      "src/**/*.{js,scss,json}": "prettier --single-quote --trailing-comma all --write"
-    },
-  
+  "lint-staged": {
+    "src/**/*.{js,scss,json}": "prettier --single-quote --trailing-comma all --write"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
-    "mongoose": "^5.10.5"
+    "method-override": "^3.0.0",
+    "mongoose": "^5.10.5",
+    "mongoose-slug-generator": "^1.0.4"
   },
   "devDependencies": {
     "husky": "^4.3.0",
@@ -38,6 +38,6 @@
     "morgan": "^1.10.0",
     "node-sass": "^4.14.1",
     "nodemon": "^2.0.4",
-    "prettier": "^2.1.2" 
+    "prettier": "^2.1.2"
   }
 }
