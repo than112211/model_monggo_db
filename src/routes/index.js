@@ -1,14 +1,18 @@
- const newsRoute = require('./news');
  const siteRoute = require('./site');
  const movieRoute = require('./movies');
+ const adminRoute = require('./admin');
+ const accountRoute = require('./account');
+
+
 
 
 
 
 
 function route(app){
+    app.use('/admin',adminRoute);
     app.use('/movie',movieRoute);
-    app.use('/news',newsRoute);
+    app.use('/account',accountRoute);
     app.use('/',siteRoute);
 
 
