@@ -2,6 +2,8 @@
  const movieRoute = require('./movies');
  const adminRoute = require('./admin');
  const accountRoute = require('./account');
+ const eventRoute = require('./event');
+
 
 
 
@@ -10,10 +12,11 @@
 
 
 function route(app){
-    app.use('/admin',adminRoute);
-    app.use('/movie',movieRoute);
-    app.use('/account',accountRoute);
-    app.use('/',siteRoute);
+    app.use('/event',eventRoute); // trang sự kiện
+    app.use('/admin',adminRoute); // trang edit phim
+    app.use('/movie',movieRoute); // trang show  details phim theo slug
+    app.use('/account',accountRoute); // trang accout
+    app.use('/',siteRoute); // trang chủ showw all phim
 
 
       

@@ -8,10 +8,14 @@ const { query } = require('express');
 const app = express();
 const port = 3000
 const route = require('./routes')
+var cors = require('cors')
+var validator = require('validator')
+
 
 // connect db
 db.connect();
 
+app.use(cors())
 
 app.use(express.static(path.join(__dirname,'public')));
 // cài middleware cho phương thức post để nạp dữ liệu vào body, pt get thì đc tích hợp sẵn nên dữ liệu dc lưu sẵn vào query

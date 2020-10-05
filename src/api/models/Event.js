@@ -11,6 +11,8 @@ const Event= new Schema({
         date_end:Date
         },
 
+    slug: { type: String, slug: 'name',unique: true }
+
 
 });
 module.exports= mongoose.model('event', Event);

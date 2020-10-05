@@ -8,8 +8,8 @@ class AdminControllers {
     
 
     // tạo phim
-    //POST /movie/store      
-    store(req,res,next) {
+    //POST /movie/create      
+    create(req,res,next) {
      const movie =new Movie(req.body);
     movie.save()
     .then(() => res.json(req.body))

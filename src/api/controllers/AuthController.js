@@ -2,38 +2,50 @@ const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 class AuthControllers{
 
     register(req,res,next){
-        bcrypt.hash(req.body.passwork,10,function(err,hashedPass){
+
+        bcrypt.hash(req.body.password,10,function(err,hashedPass){
             if(err){
                 res.json({message:'lỗi'})
             }
             const formData = req.body
-            formData.passwork = hashedPass
+            formData.password = hashedPass
             const user = new User(formData)
             user.save()
+            // const msg = {
+            //     to: user.email, // Change to your recipient
+            //     from: 'than123456qwe@gmail.com', // Change to your verified sender
+            //     subject: 'Sending with SendGrid is Fun',
+            //     text: 'and easy to do anywhere, even with Node.js',
+            //     html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+            //   }
+            //   sgMail
+            // .send(msg)
             .then(() => res.json({message:'đăng kí thành công'}))
             .catch(next)          
         })
     }
     login(req,res,next){
-        var username= req.body.username
-        var passwork= req.body.passwork
-        User.findOne({username:username})
+
+        
+        User.findOne({email:req.body.email})
         .then(user =>{
             if(user){
-                bcrypt.compare(passwork,user.passwork,function(err,result){
+                bcrypt.compare(req.body.password,user.password,function(err,result){
                     if(err){
                         res.json({message:'Lỗi đăng nhập'})
                     }
                     if(result){
-                        var token = jwt.sign({name : user.name},'veryserect',{expiresIn:'1h'})
+                       var token = jwt.sign({name : user.name},'veryserect',{expiresIn:'1h'})                         
                         res.json({message:'login succes',token})
-                        
-                        
-                     
+                      
+                        User.updateOne({user},{token:token}) 
+                                  
                     }
                     else  res.json({message:'Mật khẩu sai'})
                 })
