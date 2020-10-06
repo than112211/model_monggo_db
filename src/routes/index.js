@@ -3,6 +3,8 @@
  const adminRoute = require('./admin');
  const accountRoute = require('./account');
  const eventRoute = require('./event');
+ const verifyRoute = require('./verify');
+
 
 
 
@@ -13,6 +15,8 @@
 
 function route(app){
     app.use('/event',eventRoute); // trang sự kiện
+    app.use('/verify',verifyRoute); // xác nhận email
+
     app.use('/admin',adminRoute); // trang edit phim
     app.use('/movie',movieRoute); // trang show  details phim theo slug
     app.use('/account',accountRoute); // trang accout

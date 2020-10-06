@@ -26,7 +26,8 @@ const User = Schema({
       required: true,
       minLength: 6
   },
-  token: [String]
+  token: [String],
   
+  isVerified:Boolean,
   })
   module.exports= mongoose.model('user', User);
