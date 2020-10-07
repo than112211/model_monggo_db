@@ -1,6 +1,6 @@
 
 const Movie = require('../models/Movie')
-class SiteControllers {
+class HomeControllers {
 
     index(req, res,next) {
 
@@ -29,4 +29,4 @@ class SiteControllers {
 
 
 
-module.exports = new SiteControllers;
+module.exports = new HomeControllers;

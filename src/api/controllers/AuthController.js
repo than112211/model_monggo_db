@@ -1,9 +1,10 @@
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 const sgMail = require('@sendgrid/mail')
-sgMail.setApiKey('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')
+sgMail.setApiKey(process.env.SENDGIRD_KEY)
 
 class AuthControllers{
 
@@ -33,7 +34,7 @@ class AuthControllers{
                 from: 'than123456qwe@gmail.com', // Change to your verified sender
                 subject: 'Xác minh tài khoản Le Do Cinema',
                 text: 'Bạn muốn xác nhận tài khoản Le Do Cinema.',
-                html: `<a href="http://${req.headers.host}/verify/email?token=${user.token}">Vui lòng kích vào đây để xác nhận</a>`,
+                html: `<a href="http://${req.headers.host}/account/verify?token=${user.token}">Vui lòng kích vào đây để xác nhận</a>`,
               }
             sgMail.send(msg)
             .then(() => res.json({message:'đăng kí thành công'}))
@@ -83,6 +84,22 @@ class AuthControllers{
         .catch(next)
        
 
+    }
+    //PUT /account/:token
+       // PUT là method để chỉnh sửa
+       update(req,res,next) {
+        bcrypt.hash(req.body.password,10,function(err,hashedPass){
+            if(err){
+                res.json({message:'ko mã hóa đc mk'})
+            }
+            const formData = req.body
+            formData.password = hashedPass
+        Movie.updateOne({token:req.params.token} ,formData) // điều kiện , reqbody là các bản ghi để sữa
+        //redirec điều hướng sang
+        .then(() => res.json({message:'Đã cập nhập'}))
+   
+    .catch(next)
+     })
     }
 }
 module.exports = new AuthControllers;

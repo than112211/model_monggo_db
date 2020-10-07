@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const mongoose = require('mongoose');
-const URI ="mongodb+srv://admin:admin@cluster0.crree.mongodb.net/ledocinema?retryWrites=true&w=majority";
+require('dotenv').config()
+const URI =process.env.MONGGO_URI;
 
 
 // const client = new MongoClient(URI, { useNewUrlParser: true,

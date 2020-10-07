@@ -10,8 +10,7 @@ const port = 3000
 const route = require('./routes')
 var cors = require('cors')
 var validator = require('validator')
-
-
+require('dotenv').config()
 // connect db
 db.connect();
 

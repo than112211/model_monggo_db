@@ -13,10 +13,10 @@ const Movietime = Schema({
   date_end:Date
   },
   
-  seat:{
-    seat_id: [String],
-    seat_available: Number
-  }
+  seat:[{
+    seat_id: [],
+    seat_available:Boolean,
+  }]
   });
 
   module.exports= mongoose.model('movietime', Movietime);
