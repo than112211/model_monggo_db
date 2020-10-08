@@ -16,6 +16,7 @@ const Movie= new Schema({
     length:Number,
     language:String,
     rating: Number,
+    date_start:Date,
     // tạo slug thông qua name 
     slug: { type: String, slug: 'name',unique: true }
   });

@@ -1,13 +1,14 @@
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+
 require('dotenv').config()
 
 const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGIRD_KEY)
 
 class AuthControllers{
-
+// POST account/register
     register(req,res,next){
         // check email is registed
         User.findOne({email:req.body.email})
@@ -25,7 +26,7 @@ class AuthControllers{
             const formData = req.body
             formData.password = hashedPass
             formData.isVerified = false
-            formData.token= jwt.sign({name :req.body.name},'veryserect',{expiresIn:'1h'})                         
+            formData.token= jwt.sign({email :req.body.email},process.env.JWT_KEY,{expiresIn:'1h'})                         
             const user = new User(formData)
             user.save()
             // gữi email
@@ -42,6 +43,8 @@ class AuthControllers{
         })
     }})
     }
+
+// POST account/login
     login(req,res,next){
 
         
@@ -53,11 +56,14 @@ class AuthControllers{
                         res.json({message:'Lỗi đăng nhập'})
                     }
                     if(result){
-                       var token = jwt.sign({name : user.name},'veryserect',{expiresIn:'1h'})                         
+                       var token = jwt.sign({email: user.email},process.env.JWT_KEY,{expiresIn:'1h'})                         
                         res.json({message:'login succes',token})
-                      
-                        user.token=token
+                        // for(var i=1 ; i<10 ;i++){
+                        //     if(user.token[i]=null){
+                        user.token=user.token.concat(token)
                         user.save()
+                    // }
+                    // }
                                   
                     }
                     else  res.json({message:'Mật khẩu sai'})
@@ -70,7 +76,8 @@ class AuthControllers{
         .catch(next)
 
     }
-    index(req,res,next){
+    // GET account/verify
+    verify(req,res,next){
        User.findOne({token:req.query.token})
       .then(user => {
                      if(user.isVerified==false){
@@ -94,12 +101,51 @@ class AuthControllers{
             }
             const formData = req.body
             formData.password = hashedPass
-        Movie.updateOne({token:req.params.token} ,formData) // điều kiện , reqbody là các bản ghi để sữa
-        //redirec điều hướng sang
+        Movie.updateOne({token:req.params.token} ,formData) // điều kiện , formdata là các bản ghi để sữa
+        
         .then(() => res.json({message:'Đã cập nhập'}))
    
     .catch(next)
      })
     }
+
+    // GET account/me
+    me(req,res,next){
+        const token = req.header('auth-token')
+        const data = jwt.verify(token, process.env.JWT_KEY)
+        User.findOne({email: data.email,token: token })
+        .then(user => res.json(user) )
+        .catch( next)
+ 
+     }
+     // POST account/logout  1 device
+     logout(req,res,next){
+        
+        const token = req.header('auth-token')
+        const data = jwt.verify(token, process.env.JWT_KEY)
+        User.findOne({email: data.email,token: token })
+        // xóa token trùng với token đã đăng nhập ( truyền từng user.token vào tokenlogout sau đó kiểm tra kết quả trả về cho user.token)
+        .then(user => { user.token=user.token.filter( (tokenlogout) => {return tokenlogout != token})
+                        user.save()
+                        res.json({message:'Đã đăng xuất'})
+        })
+        .catch(next)
+ 
+     }
+
+     // POST account/logout  all device
+     logoutall(req,res,next){
+        
+        const token = req.header('auth-token')
+        const data = jwt.verify(token, process.env.JWT_KEY)
+        User.findOne({email: data.email,token: token })
+        // xóa token cuối
+        .then(user => { user.token.splice(0,user.token.length)
+        user.save()
+        res.json({message:'Đã đăng xuất khỏi tất cả thiết bị'})
+        })
+        .catch(next)
+ 
+     }
 }
 module.exports = new AuthControllers;
