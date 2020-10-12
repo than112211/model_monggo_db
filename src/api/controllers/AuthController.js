@@ -95,18 +95,14 @@ class AuthControllers{
     //PUT /account/:token
        // PUT là method để chỉnh sửa
        update(req,res,next) {
-        bcrypt.hash(req.body.password,10,function(err,hashedPass){
-            if(err){
-                res.json({message:'ko mã hóa đc mk'})
-            }
-            const formData = req.body
-            formData.password = hashedPass
-        Movie.updateOne({token:req.params.token} ,formData) // điều kiện , formdata là các bản ghi để sữa
+        const token = req.header('auth-token')
+        const data = jwt.verify(token, process.env.JWT_KEY)
+        Movie.updateOne({email: data.email} ,req.body) // điều kiện , formdata là các bản ghi để sữa
         
         .then(() => res.json({message:'Đã cập nhập'}))
    
-    .catch(next)
-     })
+        .catch(next)
+     
     }
 
     // GET account/me
@@ -116,7 +112,7 @@ class AuthControllers{
         User.findOne({email: data.email,token: token })
         .then(user => res.json(user) )
         .catch( next)
- 
+        
      }
      // POST account/logout  1 device
      logout(req,res,next){
@@ -130,7 +126,7 @@ class AuthControllers{
                         res.json({message:'Đã đăng xuất'})
         })
         .catch(next)
- 
+        
      }
 
      // POST account/logout  all device
@@ -139,12 +135,42 @@ class AuthControllers{
         const token = req.header('auth-token')
         const data = jwt.verify(token, process.env.JWT_KEY)
         User.findOne({email: data.email,token: token })
-        // xóa token cuối
+        // xóa tất cả token
         .then(user => { user.token.splice(0,user.token.length)
         user.save()
         res.json({message:'Đã đăng xuất khỏi tất cả thiết bị'})
         })
         .catch(next)
+       
+ 
+     }
+     changepassword(req,res,next){
+        
+        const token = req.header('auth-token')
+        const data = jwt.verify(token, process.env.JWT_KEY)
+        User.findOne({email: data.email,token: token })
+        // xóa tất cả token
+        .then(user => { 
+            bcrypt.compare(req.body.oldpassword,user.password,function(err,result){
+            if(err){
+                res.json({message:'Mật khẩu cũ không đúng'})
+            }
+            if(result){
+                bcrypt.hash(req.body.newpassword,10,function(err,hashedPass){
+                    if(err){
+                        res.json({message:'Lỗi đăng nhập'})
+                    }
+                    if(result){
+                user.password=hashedPass
+                user.save()
+                res.json({message:'thay đổi thành công'})
+                    }})
+            }
+       
+        })
+    })
+        .catch(next)
+       
  
      }
 }

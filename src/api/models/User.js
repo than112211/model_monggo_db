@@ -4,7 +4,7 @@ var validator = require('validator');
 
 const User = Schema({
     id : Schema.Types.ObjectId,
-  
+
     name: {
       type: String,
       required: true,
