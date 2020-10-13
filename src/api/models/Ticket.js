@@ -5,13 +5,11 @@ const Ticket = Schema({
     user_id:Schema.Types.ObjectId,
     movietime_id:Schema.Types.ObjectId,
     theater_id:Schema.Types.ObjectId,
+    numberticket:Number,
     namemovie:String,
     theater:String,
-    seat:[
-      
+    seat:[     
         String
-      
-      
     ],
     total_price:Number,
     code_gift:String,

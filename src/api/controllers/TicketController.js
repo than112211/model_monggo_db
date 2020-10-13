@@ -40,19 +40,20 @@ class TicketControllers {
                     Theater.findOne({_id:movietime.theater_id})
                         .then(theater=>{
                                 var n=0
-                            for(var i = 0;i<movietime.seat.length;i++){
-                                         for(var j =0;j<movietime.seat[i].length;j++){
-                                             for(var s=0;s<req.body.seat.length;s++){ //s0=a1
-                                                 if(movietime.seat[i][j].id==req.body.seat[s]){
-                                                        if( movietime.seat[i][j].available==false){                                                  
-                                                          movietime.seat[i][j].available=true
-                                                                 n+=1            
-                                                         }                                                      
-                                                      }                           
-                                                     }
-                                                     }
-                                                 }                                         
-                                                 if(n==req.body.seat.length){
+                  
+                            for(var i = 0;i<movietime.seat.length;i++){ 
+                                for(var j =0;j<movietime.seat[i].length;j++){
+                                    for(var s=0;s<req.body.seat.length;s++){
+                                        if(movietime.seat[i][j].id==req.body.seat[s]){
+                                            if( movietime.seat[i][j].available==false){                                                  
+                                                movietime.seat[i][j].available=true
+                                                n+=1            
+                                                                }                                                    
+                                                            }                           
+                                                        }
+                                                    } 
+                                                }                                         
+                                                if(n==req.body.numberticket ){
                                                     req.body.theater=theater.theater_number
                                                     req.body.total_price=  movietime.price * req.body.seat.length                         
                                                     const ticket =new Ticket(req.body);
@@ -60,7 +61,8 @@ class TicketControllers {
                                                     movietime.save()               
                                                     res.json(ticket)
                                                  }
-                                                 else res.json({mess:'vUI lòng chọn lại ghế'})
+                                              
+                                                else res.json({mess:'Vui lòng chọn đủ '+req.body.numberticket+' ghế'})
                         })
                         .catch(next)
                     })

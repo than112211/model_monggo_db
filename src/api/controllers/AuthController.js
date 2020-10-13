@@ -112,6 +112,7 @@ class AuthControllers{
         User.findOne({email: data.email,token: token })
         .then(user => res.json(user) )
         .catch( next)
+       
         
      }
      // POST account/logout  1 device

@@ -1,14 +1,15 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
-class authMidle{
 
-    auth (req, res, next){
-    const token = req.header('auth-token')
+
+ const auth=async(req, res, next) =>{
+    const token =req.header('Authorization').replace('Bearer ', '')
     const data = jwt.verify(token, process.env.JWT_KEY)
     
-      const user=  User.findOne({email: data.email,token: token })
-        req.user = user
-}}
+     const user= await User.findOne({email: data.email,token: token })
+       req.user = user
+       req.token = token
+}
 
 
-module.exports = new authMidle;
+module.exports = auth;
