@@ -15,7 +15,7 @@ class MovietimeControllers {
     // tạo Movietime
     //POST /Movietime/create      
     create(req,res,next) {    
-    req.body.seat= [
+     var seat= [
         [{id :'A1', available:false},{id :'A2', available:false},{id :'A3', available:false},{id :'A4', available:false},{id :'A5', available:false},{id :'A6', available:false},{id :'A7', available:false},{id :'A8', available:false},{id :'A9', available:false},{id :'A10', available:false},{id :'A11', available:false},{id :'A12', available:false}],
         [{id :'B1', available:false},{id :'B2', available:false},{id :'B3', available:false},{id :'B4', available:false},{id :'B5', available:false},{id :'B6', available:false},{id :'B7', available:false},{id :'B8', available:false},{id :'B9', available:false},{id :'B10', available:false},{id :'B11', available:false},{id :'B12', available:false}],
         [{id :'C1', available:false},{id :'C2', available:false},{id :'C3', available:false},{id :'C4', available:false},{id :'C5', available:false},{id :'C6', available:false},{id :'C7', available:false},{id :'C8', available:false},{id :'C9', available:false},{id :'C10', available:false},{id :'C11', available:false},{id :'C12', available:false}],
@@ -25,7 +25,10 @@ class MovietimeControllers {
         [{id :'G1', available:false},{id :'G2', available:false},{id :'G3', available:false},{id :'G4', available:false},{id :'G5', available:false},{id :'G6', available:false},{id :'G7', available:false},{id :'G8', available:false},{id :'G9', available:false},{id :'G10', available:false},{id :'G11', available:false},{id :'G12', available:false}],
         [{id :'H1', available:false},{id :'H2', available:false},{id :'H3', available:false},{id :'H4', available:false},{id :'H5', available:false},{id :'H6', available:false},{id :'H7', available:false},{id :'H8', available:false},{id :'H9', available:false},{id :'H10', available:false},{id :'H11', available:false},{id :'H12', available:false}],
         [{id :'I1', available:false},{id :'I2', available:false},{id :'I3', available:false},{id :'I4', available:false},{id :'I5', available:false},{id :'I6', available:false},{id :'I7', available:false},{id :'I8', available:false},{id :'I9', available:false},{id :'I10', available:false},{id :'I11', available:false},{id :'I12', available:false}],
-        [{id :'J1', available:false},{id :'J2', available:false},{id :'J3', available:false},{id :'J4', available:false},{id :'J5', available:false},{id :'J6', available:false},{id :'J7', available:false},{id :'J8', available:false},{id :'J9', available:false},{id :'J10', available:false},{id :'J11', available:false},{id :'J12', available:false}] ];
+        [{id :'J1', available:false},{id :'J2', available:false},{id :'J3', available:false},{id :'J4', available:false},{id :'J5', available:false},{id :'J6', available:false},{id :'J7', available:false},{id :'J8', available:false},{id :'J9', available:false},{id :'J10', available:false},{id :'J11', available:false},{id :'J12', available:false}] ];       
+       for(var i=0;i<req.body.movietime.times.length;i++){
+        req.body.movietime.times[i].seat=seat
+       }
         const movietime =new Movietime(req.body); 
             movietime.save()
     .then(() => res.json(req.body))

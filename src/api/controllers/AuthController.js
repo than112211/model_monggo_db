@@ -24,6 +24,7 @@ class AuthControllers{
                 res.json({message:'ko mã hóa đc mk'})
             }
             const formData = req.body
+            formData.point=0
             formData.password = hashedPass
             formData.isVerified = false
             formData.token= jwt.sign({email :req.body.email},process.env.JWT_KEY,{expiresIn:'1h'})                         

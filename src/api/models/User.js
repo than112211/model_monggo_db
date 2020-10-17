@@ -21,6 +21,7 @@ const User = Schema({
           }
       }
   },
+  point:Number,
   password: {
       type: String,
       required: true,
