@@ -36,7 +36,8 @@
     "method-override": "^3.0.0",
     "mongoose": "^5.10.5",
     "mongoose-slug-generator": "^1.0.4",
-    "validator": "^13.1.17"
+    "validator": "^13.1.17",
+    "voucher-code-generator": "^1.1.1"
   },
   "devDependencies": {
     "husky": "^4.3.0",

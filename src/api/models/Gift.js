@@ -5,12 +5,14 @@ const Gift= new Schema({
     id:Schema.Types.ObjectId,
     name :String,
     amount:Number,
-    code:[{
-        id:String,
-        available:Boolean
-    }],
+    code:[String],
     value : Number,
     available:Number,
+    point_to_get:Number,
+    date:{
+        date_start:Date,
+        date_end:Date
+    }
 
 
 });

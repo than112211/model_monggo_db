@@ -30,5 +30,10 @@ const User = Schema({
   token: [String],
   
   isVerified:Boolean,
+  gift_code:[{
+      code:String,
+      value:Number
+  }],
+
   })
   module.exports= mongoose.model('user', User);

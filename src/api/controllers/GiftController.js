@@ -1,6 +1,12 @@
 
 const Gift = require('../models/Gift')
-
+const voucher_codes = require('voucher-code-generator');
+const { count } = require('../models/Gift');
+const User = require('../models/User');
+const Ticket = require('../models/Ticket');
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken');
+const { NULL } = require('node-sass');
 
 class GiftControllers {
 
@@ -29,10 +35,46 @@ class GiftControllers {
     // tạo gift
     //POST /gift/create      
     create(req,res,next) {
+     req.body.code =voucher_codes.generate({
+         length:10,
+         count:req.body.amount
+     })
+     req.body.available =req.body.code.length
      const gift =new Gift(req.body);
+     
     gift.save()
     .then(() => res.json(req.body))
     .catch(next)
+    }
+
+    //POST /gift/:id/get
+    get(req,res,next) {
+        const token = req.header('auth-token')
+        const data = jwt.verify(token, process.env.JWT_KEY)
+        User.findOne({email: data.email,token: token })
+        .then(user =>{       
+            Gift.findOne({_id:req.params.id})
+            .then(gift =>{
+                if(gift.code !== NULL ){
+                    if(user.point>=gift.point_to_get){
+                        var n={code:gift.code[0],
+                                value:gift.value}
+                            user.gift_code.push(n) // thêm code và value vào user
+                            user.point=user.point-gift.point_to_get
+                            user.save()
+                            gift.code.shift() // xóa đầu mảng
+                            gift.available=gift.available-1
+                            gift.save()
+                            res.json({message:'Đổi code thành công vui lòng vào Ví Voucher để xem chi tiết'})
+                    }
+                    else res.json({message:'Không đủ điểm để đổi'})
+                }
+                else res.json({message:'Hết code'})
+            })
+            .catch(next)
+        })
+        .catch(next)
+
     }
 
 
