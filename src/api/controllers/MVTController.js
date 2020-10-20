@@ -5,11 +5,17 @@ const Movietime = require('../models/Movietime')
 class MovietimeControllers {
 
      //get /Movietime/:idmovie
+     // lấy tất cả movietime theo id movie
      show(req,res,next) {
-        Movietime.findOne({movie_id:req.params.id})
-        // nhận về colecttion Movietime theo slug
-        .then(movietime =>  res.json(movietime))
-        .catch(next)
+        Movietime.find({movie_id:req.params.id},function(err,movietime){
+            if(!err)  {
+                res.json(movietime);
+            }
+            else
+            res.json({error:'Không tìm thấy'})
+        })
+     
+        
     }
 
     // tạo Movietime

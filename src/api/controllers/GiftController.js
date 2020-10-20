@@ -3,8 +3,6 @@ const Gift = require('../models/Gift')
 const voucher_codes = require('voucher-code-generator');
 const { count } = require('../models/Gift');
 const User = require('../models/User');
-const Ticket = require('../models/Ticket');
-const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
 const { NULL } = require('node-sass');
 
@@ -55,7 +53,8 @@ class GiftControllers {
         .then(user =>{       
             Gift.findOne({_id:req.params.id})
             .then(gift =>{
-                if(gift.code !== NULL ){
+
+                if(gift.code.length >0 ){
                     if(user.point>=gift.point_to_get){
                         var n={code:gift.code[0],
                                 value:gift.value}

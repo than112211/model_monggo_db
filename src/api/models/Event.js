@@ -6,6 +6,7 @@ const Event= new Schema({
     name :String,
     discription:String,
     image: String,
+    cover_image:String,
     date:{
         date_start:Date,
         date_end:Date

@@ -73,13 +73,8 @@ class TicketControllers {
                             }
                                                 // nếu gift == null thì save , !nul thì giá - gift rồi save                                  
                                                 if(n==req.body.numberticket ){
-                                                   
-                                                    // // tìm giá của suất chiếu
-                                                    // for(var i=0;i<movietime.movietime.times.length;i++){
-                                                    //     if(movietime.movietime.times[i].hour ==req.body.hour){
-                                                    //         price=movietime.movietime.times[i].price
-                                                    //     }
-                                                    // }
+                                                   if(req.body.code_gift == null){
+                                                  
                                                     req.body.theater=theater.theater_number
                                                     req.body.date=movietime.movietime.date
 
@@ -90,6 +85,28 @@ class TicketControllers {
                                                     user.point= user.point+(req.body.total_price/10000 )  
                                                     user.save()        
                                                     res.json(ticket)
+                                                   }
+                                                   else{
+                                                       for(var i=0;i<user.gift_code.length;i++){
+                                                           if(user.gift_code[i].code === req.body.code_gift){
+
+                                                            req.body.theater=theater.theater_number
+                                                            req.body.date=movietime.movietime.date
+        
+                                                            req.body.total_price= (req.body.numberticket  * price ) - user.gift_code[i].value             
+                                                            const ticket =new Ticket(req.body);
+                                                            ticket.save()   
+                                                            movietime.save() 
+                                                            user.point= user.point+(req.body.total_price/10000 )  
+                                                            user.gift_code.splice(i,1)
+                                                            user.save()        
+                                                            res.json(ticket)
+                                                           }
+                                                           else  res.json({message:'Code không đúng, Kiểm tra lại'})
+                                                       }
+                                                    
+
+                                                   }
                                                  }
                                               
                                                 else res.json({mess:'Vui lòng chọn đủ '+req.body.numberticket+' ghế'})
