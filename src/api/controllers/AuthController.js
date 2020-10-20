@@ -9,9 +9,9 @@ sgMail.setApiKey(process.env.SENDGIRD_KEY)
 
 class AuthControllers{
 
-
-    checkemail(email){
-        User.findOne({email:email},function(err,user){
+    
+    checkemail(req,res){
+        User.findOne({email:req.body.email},function(err,user){
             if(user){
                 return true
             }
