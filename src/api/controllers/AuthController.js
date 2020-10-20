@@ -8,6 +8,18 @@ const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGIRD_KEY)
 
 class AuthControllers{
+
+
+    checkemail(email){
+        User.findOne({email:email},function(err,user){
+            if(user){
+                return true
+            }
+            else return false
+        })
+        
+        
+    }
 // POST account/register
     register(req,res,next){
         // check email is registed

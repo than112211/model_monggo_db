@@ -8,7 +8,7 @@ router.post('/create',giftControllers.create); // để lưu dữ liệu khi đ�
 router.post('/:id/get',giftControllers.get);
 router.delete('/:id',giftControllers.delete);
 router.put('/:id',giftControllers.update);
-router.get('/:slug',giftControllers.show);
+router.get('/:id',giftControllers.show);
 
 
 module.exports = router;

@@ -8,10 +8,9 @@ const { NULL } = require('node-sass');
 
 class GiftControllers {
 
-     //get /gift/:slug
+     //get /gift/:id
      show(req,res,next) {
-        Gift.findOne({slug :req.params.slug})
-        // nhận về colecttion gift theo slug
+        Gift.findOne({slug :req.params.id})
         .then(gift =>  res.json(gift))
         .catch(next)
     }
