@@ -1,9 +1,8 @@
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-
 require('dotenv').config()
-
+const shortid = require('shortid');
 const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGIRD_KEY)
 
@@ -188,14 +187,43 @@ class AuthControllers{
  
      }
 
-     reserpassword(req,res,next){
+     resetpassword(req,res,next){
          
         User.findOne({email: req.body.email },function(err,user){
             if(!err){
-                
+                const msg = {
+                    to: user.email, // Change to your recipient
+                    from: 'than123456qwe@gmail.com', // Change to your verified sender
+                    subject: 'Cấp lại mật khẩu Le Do Cinema',
+                    text: 'Tìm mật khẩu',
+                    html: `<a href="http://${req.headers.host}/account/recieve?email=${user.email}">Vui lòng kích vào đây để nhận lại mật khẩu,Nếu không phải bạn yêu cầu cấp lại mật khẩu thì không cần làm gì</a>`,
+                  }
+                sgMail.send(msg)
+                res.json({message:'Vui lòng vào email để nhận lại mật khẩu'})
             }
+            else
+            res.json({message:'Không tìm thấy tài khoản'})
             
         })
+     }
+     recieve(req,res,next){
+        User.findOne({email:req.query.email})
+        .then(user => {
+          var  password=shortid.generate()
+            bcrypt.hash(password,10,function(err,hashedPass){
+                if(!err){
+                    user.password=hashedPass
+                    res.json({message:'Mật khẩu:'+password+'.Xin vui lòng đổi lại mật khẩu để đảm bảo an toàn'})
+                    user.save()
+                }
+                else
+                res.json({message:'ko mã hóa đc mk'})
+
+            })
+                      
+        })
+     
+          .catch(next)
      }
 }
 module.exports = new AuthControllers;

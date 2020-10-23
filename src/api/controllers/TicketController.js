@@ -187,7 +187,7 @@ class TicketControllers {
                                                    }
                                                    else{
                                                        for(var i=0;i<user.gift_code.length;i++){
-                                                           if(user.gift_code[i].code === req.body.code_gift){
+                                                           if(user.gift_code[i].code == req.body.code_gift){
 
                                                             req.body.theater=theater.theater_number
                                                             req.body.date=movietime.movietime.date
