@@ -163,7 +163,7 @@ class AuthControllers{
         const token = req.header('auth-token')
         const data = jwt.verify(token, process.env.JWT_KEY)
         User.findOne({email: data.email,token: token })
-        // xóa tất cả token
+     
         .then(user => { 
             bcrypt.compare(req.body.oldpassword,user.password,function(err,result){
             if(err){
@@ -186,6 +186,16 @@ class AuthControllers{
         .catch(next)
        
  
+     }
+
+     reserpassword(req,res,next){
+         
+        User.findOne({email: req.body.email },function(err,user){
+            if(!err){
+                
+            }
+            
+        })
      }
 }
 module.exports = new AuthControllers;

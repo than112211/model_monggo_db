@@ -25,14 +25,6 @@ const Movietime = Schema({
     }
           ]
   },
-  // seat:[
-  //   [
-  // {
-  //   id: String,
-  //   available:Boolean,
-  // }
-  //   ]
-  // ],
       
 
 
