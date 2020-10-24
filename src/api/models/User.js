@@ -34,6 +34,7 @@ const User = Schema({
       code:String,
       value:Number
   }],
+  avartar:String
 
   })
   module.exports= mongoose.model('user', User);

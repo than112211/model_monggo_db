@@ -36,6 +36,7 @@ class AuthControllers{
             }
             const formData = req.body
             formData.point=0
+            formData.avartar='src/resoures/defaulavartar.jpg'
             formData.password = hashedPass
             formData.isVerified = false
             formData.token= jwt.sign({email :req.body.email},process.env.JWT_KEY,{expiresIn:'1h'})                         
@@ -225,5 +226,19 @@ class AuthControllers{
      
           .catch(next)
      }
+     //POST /account/avartar
+     avartar(req,res,next){
+        const token = req.header('auth-token')
+        const data = jwt.verify(token, process.env.JWT_KEY)
+        User.findOne({email: data.email,token: token })    
+        .then(user => { 
+            user.avartar = req.file.path  
+            user.save()         
+           res.json({message:'Đã cập nhập ảnh đại diện'})
+        })
+        .catch(next)
+         
+     
+}
 }
 module.exports = new AuthControllers;
