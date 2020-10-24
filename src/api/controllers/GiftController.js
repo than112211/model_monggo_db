@@ -1,10 +1,8 @@
 
 const Gift = require('../models/Gift')
 const voucher_codes = require('voucher-code-generator');
-const { count } = require('../models/Gift');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const { NULL } = require('node-sass');
 
 class GiftControllers {
 

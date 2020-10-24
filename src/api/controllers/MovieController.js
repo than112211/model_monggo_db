@@ -5,6 +5,8 @@ const Movie = require('../models/Movie')
 class MovieControllers {
 
 
+ 
+
     //get /movie/:slug
     show(req,res,next) {
         Movie.findOne({slug :req.params.slug})
@@ -15,6 +17,8 @@ class MovieControllers {
      // tạo phim
     //POST /movie/create      
     create(req,res,next) {
+        req.body.image=req.file.path
+      
         const movie =new Movie(req.body);
        movie.save()
        .then(() => res.json(req.body))
@@ -25,6 +29,7 @@ class MovieControllers {
        //PUT /movie/:id 
        // PUT là method để chỉnh sửa
         update(req,res,next) {
+            req.body.image=req.file.path
            Movie.updateOne({_id:req.params.id} ,req.body) // điều kiện , reqbody là các bản ghi để sữa
            //redirec điều hướng sang
            .then(() => res.json({message:'Đã cập nhập'}))

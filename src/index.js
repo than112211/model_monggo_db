@@ -15,6 +15,7 @@ require('dotenv').config()
 db.connect();
 
 app.use(cors())
+app.use('/src/resoures',express.static(path.join(__dirname,'resoures')))
 
 app.use(express.static(path.join(__dirname,'public')));
 // cài middleware cho phương thức post để nạp dữ liệu vào body, pt get thì đc tích hợp sẵn nên dữ liệu dc lưu sẵn vào query

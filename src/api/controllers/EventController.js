@@ -29,6 +29,7 @@ class EventControllers {
     // tạo event
     //POST /event/create      
     create(req,res,next) {
+        req.body.image = req.file.path
      const event =new Event(req.body);
     event.save()
     .then(() => res.json(req.body))
@@ -39,6 +40,7 @@ class EventControllers {
     //PUT /event/:id 
     // PUT là method để chỉnh sửa
      update(req,res,next) {
+        req.body.image = req.file.path
         Event.updateOne({_id:req.params.id} ,req.body) // điều kiện , reqbody là các bản ghi để sữa
         .then(() => res.json({message:'Đã cập nhập'}))
    
