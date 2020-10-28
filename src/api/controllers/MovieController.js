@@ -45,6 +45,23 @@ class MovieControllers {
       
        .catch(next)
         }
+        //UPDATE /movie/:id/dangchieu
+        dangchieu(req,res,next){
+            req.body.playing=true
+            Movie.updateOne({_id:req.params.id} ,req.body) 
+           //redirec điều hướng sang
+           .then(() => res.json({message:'Phim đang chiếu'}))
+           .catch(next)
+        }
+
+        //UPDATE /movie/:id/sapchieu
+        sapchieu(req,res,next){
+            req.body.playing=false
+            Movie.updateOne({_id:req.params.id} ,req.body) 
+           //redirec điều hướng sang
+           .then(() => res.json({message:'Phim sắp chiếu'}))
+           .catch(next)
+        }
 
       
    }

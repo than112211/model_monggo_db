@@ -15,8 +15,10 @@ const upload = multer({storage:storage})
 
 router.post('/create',upload.single('image'),movieControllers.create); // để lưu dữ liệu khi đăng phim mới
 router.delete('/:id',movieControllers.delete);
-router.put('/:id',upload.single('image'),movieControllers.update);
 router.get('/:slug',movieControllers.show);
+router.put('/:id/dangchieu',movieControllers.dangchieu);
+router.put('/:id/sapchieu',movieControllers.sapchieu);
+router.put('/:id',upload.single('image'),movieControllers.update);
 
 // nếu ghi slug (có thể dùng từ khác) thì khi vào controller thì param.slug
 

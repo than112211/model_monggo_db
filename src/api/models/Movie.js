@@ -16,7 +16,7 @@ const Movie= new Schema({
     length:Number,
     language:String,
     rating: Number,
-    // date_start:Date,
+    playing:Boolean, // true là đang chiếu , false sắp chiếu
     date:{
       date_start:Date,
       date_end:Date
