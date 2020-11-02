@@ -30,6 +30,7 @@ class EventControllers {
     //POST /event/create      
     create(req,res,next) {
         req.body.image = req.file.path
+        req.body.cover_image =req.find.path
      const event =new Event(req.body);
     event.save()
     .then(() => res.json(req.body))

@@ -8,7 +8,7 @@ class GiftControllers {
 
      //get /gift/:id
      show(req,res,next) {
-        Gift.findOne({slug :req.params.id})
+        Gift.findOne({_id:req.params.id})
         .then(gift =>  res.json(gift))
         .catch(next)
     }

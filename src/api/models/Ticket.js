@@ -12,6 +12,7 @@ const Ticket = Schema({
     seat:[     
         String
     ],
+    paid:Boolean,
     total_price:Number,
     code_gift:String,
 },
