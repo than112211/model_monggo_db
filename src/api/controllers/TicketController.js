@@ -81,14 +81,14 @@ class TicketControllers {
                                                            req.body.paid = false          
                                                     const ticket =new Ticket(req.body);
                                                    
-                                                    
+                                        
                                                         ticket.save()   
                                                         movietime.save() 
-                                                        user.point= user.point+(req.body.total_price/10000 )  
-                                                        user.save()        
+                                                        // user.point= user.point+(req.body.total_price/10000 )  
+                                                        // user.save()        
                                                         res.json(ticket)
-                                                     
-                                              
+                                                    setTimeout(this.deleteTicket(ticket._id),600000) // sau 10p ko thanh toán thì hủy vé
+                                            
                                                    
                                                    }
                                                    else{      // nếu nhập code
@@ -107,8 +107,8 @@ class TicketControllers {
                                                     
                                                             ticket.save()   
                                                             movietime.save() 
-                                                            user.point= user.point+(req.body.total_price/10000 )  
-                                                            user.save()        
+                                                            // user.point= user.point+(req.body.total_price/10000 )  
+                                                            // user.save()        
                                                             res.json(ticket)
                                                            }
                                                            else  res.json({message:'Code không đúng, Kiểm tra lại'})
@@ -138,25 +138,39 @@ class TicketControllers {
     paymentMoMo(req,res,next){
         Ticket.findOne({_id:req.params.id})
             .then(ticket=>{
-                momo.payment(ticket._id+'1234',ticket.total_price,ticket._id+'1',ticket._id)
-
-                if(req.query.errorCode==0){
-                    ticket.paid =true
-                    ticket.save()
-                        res.json({MESS:req.query.errorCode,
-                            
-                                   STATUS:req.query.message })}
-                else res.json({MESS:req.query.errorCode,
-                            
-                    STATUS:req.query.message })
-                       
+                User.findOne({_id:ticket.user_id})
+                .then(user =>{
+                    momo.payment(ticket._id+'1234',ticket.total_price,ticket._id+'1',ticket._id)
+                    if(req.query.errorCode==0){
+                        ticket.paid =true
+                        point = ticket.total_price /10000
                         
+                        ticket.save()
+                        user.point =point
+                        user.save()
+                            res.json({MESS:req.query.errorCode,
+                                
+                                       STATUS:req.query.message })}
+                    else res.json({MESS:req.query.errorCode,
+                                
+                        STATUS:req.query.message })
+                           
+                })
+                .catch(next)
+                 
         })
         .catch(next)
    
     
     }
-    deleteTicket(req,res,next){
+    deleteTicket(idticket){
+        Ticket.findOne({_id:idticket})
+        .then(ticket =>{
+            if(ticket.paid==false){
+                Ticket.deleteOne({_id:idticket})
+            }
+        })
+       
         
     }
 }
