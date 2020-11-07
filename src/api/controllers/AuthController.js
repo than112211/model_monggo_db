@@ -44,11 +44,14 @@ class AuthControllers{
             user.save()
             // gữi email
             const msg = {
+                
                 to: user.email, // Change to your recipient
                 from: 'than123456qwe@gmail.com', // Change to your verified sender
-                subject: 'Xác minh tài khoản Le Do Cinema',
-                text: 'Bạn muốn xác nhận tài khoản Le Do Cinema.',
-                html: `<a href="http://${req.headers.host}/account/verify?token=${user.token}">Vui lòng kích vào đây để xác nhận</a>`,
+                subject: 'Xác minh tài khoản Le Do Cinema',      
+                html: `<h4>Xin chào ${req.body.name},</h4>
+                <p>Chúc mừng bạn trở thành thành viên Lê Độ Cinema - Tích điểm ngay nhận quà liền tay.
+                Bạn có thể đăng nhập dễ dàng vào tài khoản Galaxy để cập nhập các chương trình ưu đãi đặc biệt dành riêng cho bạn </p>
+                <a href="http://${req.headers.host}/account/verify?token=${user.token}">Vui lòng nhấn vào đây để xác nhận</a>`,
               }
             sgMail.send(msg)
             .then(() => res.json({message:'đăng kí thành công'}))
