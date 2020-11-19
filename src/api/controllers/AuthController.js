@@ -1,6 +1,8 @@
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const path = require('path')
+
 require('dotenv').config()
 const shortid = require('shortid');
 const sgMail = require('@sendgrid/mail')
@@ -96,11 +98,18 @@ class AuthControllers{
     verify(req,res,next){
        User.findOne({token:req.query.token})
       .then(user => {
+         
                      if(user.isVerified==false){
                      user.isVerified=true,
-                     user.save(),
-                    res.json({message:'xác nhận thành công'})}
-                    else {res.json({message:'tài khoản đã đc xác nhận trưóc đó'})}
+                     user.save()
+                     res.render('mail.html')
+                    // res.json({message:'xác nhận thành công'})
+                }
+                    else {
+                        // res.json({message:'tài khoản đã đc xác nhận trưóc đó'})
+                        res.render('mail.html')
+                        // res.sendFile(path.join(__dirname,'../view/mail.html'));
+                    }
       }
                 )
    

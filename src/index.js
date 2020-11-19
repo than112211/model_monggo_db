@@ -31,12 +31,15 @@ app.use(methodOverride('_method'))
 app.use(morgan('combined'))
 //templte engine
 //định nghĩa các file  .handlebars có thể sữa lại hbs 
-app.engine('handlebars', exphbs({
-  extname:'handlebars'
-}));
-app.set('view engine', 'handlebars');
+// app.engine('handlebars', exphbs({
+//   extname:'handlebars'
+// }));
+// app.set('view engine', 'handlebars');
 // dẫn path tới file view
-app.set('views',path.join(__dirname,'resoures','view'))
+
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.set('views',path.join(__dirname,'view'))
 
 route(app); // khởi tạo route
 //  request là những yêu cầu mà ng dùng gữi đi

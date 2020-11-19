@@ -18,7 +18,8 @@ class MovieControllers {
     //POST /movie/create      
     create(req,res,next) {
         req.body.image=req.file.path
-      
+        req.body.date={date_start:req.body.date_start,date_end:req.body.date_end}
+
         const movie =new Movie(req.body);
        movie.save()
        .then(() => res.json(req.body))
@@ -30,6 +31,7 @@ class MovieControllers {
        // PUT là method để chỉnh sửa
         update(req,res,next) {
             req.body.image=req.file.path
+            req.body.date={date_start:req.body.date_start,date_end:req.body.date_end}
            Movie.updateOne({_id:req.params.id} ,req.body) // điều kiện , reqbody là các bản ghi để sữa
            //redirec điều hướng sang
            .then(() => res.json({message:'Đã cập nhập'}))

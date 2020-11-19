@@ -35,6 +35,8 @@ class GiftControllers {
          count:req.body.amount
      })
      req.body.available =req.body.code.length
+     req.body.date={date_start:req.body.date_start,date_end:req.body.date_end}
+
      const gift =new Gift(req.body);
      
     gift.save()
@@ -77,6 +79,7 @@ class GiftControllers {
     //PUT /gift/:id 
     // PUT là method để chỉnh sửa
      update(req,res,next) {
+        req.body.date={date_start:req.body.date_start,date_end:req.body.date_end}
         Gift.updateOne({_id:req.params.id} ,req.body) // điều kiện , reqbody là các bản ghi để sữa
         .then(() => res.json({message:'Đã cập nhập'}))
    
