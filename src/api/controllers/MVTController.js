@@ -29,10 +29,18 @@ class MovietimeControllers {
             seat[i][j]={id:colume[i]+(j+1),available:false}
            }
        }
-        for(var i=0;i<req.body.movietime.times.length;i++){
-        req.body.movietime.times[i].seat=seat
-       }
-       req.body.movie_id=req.params.id
+
+    //     for(var i=0;i<req.body.movietime.times.length;i++){
+    //     req.body.movietime.times[i].seat=seat
+    // //    req.body.times[i] ={hour:req.body.hour[i],price:req.body.price[i],seat:seat}
+    // //     req.body.movietime={times:req.body.times.concat(req.body.times[i])}
+    //    }
+    req.body.movietime={date:req.body.date,
+                        hour:req.body.hour,
+                        price:req.body.price,
+                        seat:seat
+                    }
+    req.body.movie_id=req.params.id
         const movietime =new Movietime(req.body); 
             movietime.save()
     .then(() => res.json(req.body))

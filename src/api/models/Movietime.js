@@ -10,11 +10,9 @@ const Movietime = Schema({
   
   movietime:{
     date:Date,
-    times:[
-    {
-      hour:String,
-      price:Number,
-      seat:[
+    hour:String,
+    price:Number,
+    seat:[
         [
       {
         id: String,
@@ -22,8 +20,20 @@ const Movietime = Schema({
       }
         ]
       ]
-    }
-          ]
+    // times:[
+    // {
+    //   hour:String,
+    //   price:Number,
+    //   seat:[
+    //     [
+    //   {
+    //     id: String,
+    //     available:Boolean,
+    //   }
+    //     ]
+    //   ]
+    // }
+    //       ]
   },
       
 

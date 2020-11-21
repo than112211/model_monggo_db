@@ -28,7 +28,7 @@ class TicketControllers {
        
     }
    
-    //POST /Ticket/:id movietime/id :time/create     
+    //POST /Ticket/:id movietime/create     
     create(req,res,next) {
        
         const token = req.header('auth-token')
@@ -46,38 +46,53 @@ class TicketControllers {
                         .then(theater=>{
                             
                                 var n=0
-                                var price,hour;
-                                for(var i=0 ;i<movietime.movietime.times.length;i++){
-                                  if(  movietime.movietime.times[i]._id==req.params.time){      
-                                        hour=movietime.movietime.times[i].hour
-                                        price=movietime.movietime.times[i].price
-                                        for(var j = 0;j<movietime.movietime.times[i].seat.length;j++){ 
-                                            for(var k=0;k<movietime.movietime.times[i].seat[j].length;k++) 
+                                // for(var i=0 ;i<movietime.movietime.times.length;i++){
+                                //   if(  movietime.movietime.times[i]._id==req.params.time){      
+                                //         hour=movietime.movietime.times[i].hour
+                                //         price=movietime.movietime.times[i].price
+                                //         for(var j = 0;j<movietime.movietime.times[i].seat.length;j++){ 
+                                //             for(var k=0;k<movietime.movietime.times[i].seat[j].length;k++) 
+                                              
+                                //                     for(var s=0;s<req.body.seat.length;s++){
+                                //                         if(movietime.movietime.times[i].seat[j][k].id==req.body.seat[s]){
+                                //                             if( movietime.movietime.times[i].seat[j][k].available==false){                                                  
+                                //                                 movietime.movietime.times[i].seat[j][k].available=true
+                                //                                 n+=1            
+                                //                                                 }  
+                                //                                             }                                                  
+                                //                                             }                           
+                                //                                          }
+                                //                                     } 
+                                //                                 }       
+                                 
+                                  
+                            
+                                        for(var j = 0;j<movietime.movietime.seat.length;j++){ 
+                                            for(var k=0;k<movietime.movietime.seat[j].length;k++) 
                                               
                                                     for(var s=0;s<req.body.seat.length;s++){
-                                                        if(movietime.movietime.times[i].seat[j][k].id==req.body.seat[s]){
-                                                            if( movietime.movietime.times[i].seat[j][k].available==false){                                                  
-                                                                movietime.movietime.times[i].seat[j][k].available=true
+                                                        if(movietime.movietime.seat[j][k].id==req.body.seat[s]){
+                                                            if( movietime.movietime.seat[j][k].available==false){                                                  
+                                                                movietime.movietime.seat[j][k].available=true
                                                                 n+=1            
                                                                                 }  
                                                                             }                                                  
                                                                             }                           
                                                                          }
-                                                                    } 
-                                                                }       
+                                                                     
+                                                                     
                                  
                                   
-                           
                            
                                                 // nếu gift == null thì save , !nul thì giá - gift rồi save                                  
                                                 if(n==req.body.numberticket ){
                                                     // nếu ko nhập code
                                                    if(req.body.code_gift == null){
-                                                    req.body.hour=hour
+                                                    req.body.hour=movietime.movietime.hour
                                                     req.body.theater=theater.theater_number
                                                     req.body.date=movietime.movietime.date
 
-                                                    req.body.total_price= req.body.numberticket  * price   
+                                                    req.body.total_price= req.body.numberticket  * movietime.movietime.price   
                                                            req.body.paid = false          
                                                     const ticket =new Ticket(req.body);
                                                    
@@ -95,12 +110,12 @@ class TicketControllers {
                                                        for(var i=0;i<user.gift_code.length;i++){
                                                            if(user.gift_code[i].code == req.body.code_gift){
 
-                                                            req.body.hour=hour
+                                                            req.body.hour= movietime.movietime.hour
                                                     req.body.theater=theater.theater_number
                                                     req.body.date=movietime.movietime.date
                                                     req.body.paid = false          
 
-                                                            req.body.total_price= (req.body.numberticket  * price ) - user.gift_code[i].value    
+                                                            req.body.total_price= (req.body.numberticket  *  movietime.movietime.price ) - user.gift_code[i].value    
                                                                   
                                                             const ticket =new Ticket(req.body);
                                                    
@@ -110,6 +125,9 @@ class TicketControllers {
                                                             // user.point= user.point+(req.body.total_price/10000 )  
                                                             // user.save()        
                                                             res.json(ticket)
+                                                           
+                                                    setTimeout(this.deleteTicket(ticket._id),600000) // sau 10p ko thanh toán thì hủy vé
+                                            
                                                            }
                                                            else  res.json({message:'Code không đúng, Kiểm tra lại'})
                                                        }

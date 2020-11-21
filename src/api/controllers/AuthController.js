@@ -102,13 +102,13 @@ class AuthControllers{
                      if(user.isVerified==false){
                      user.isVerified=true,
                      user.save()
-                     res.render('mail.html')
+                     res.render('email.html')
                     // res.json({message:'xác nhận thành công'})
                 }
                     else {
                         // res.json({message:'tài khoản đã đc xác nhận trưóc đó'})
-                        res.render('mail.html')
-                        // res.sendFile(path.join(__dirname,'../view/mail.html'));
+                        res.render('email.html')
+                        // res.sendFile('/src/view',path.join(__dirname,'view','email.html'));
                     }
       }
                 )
