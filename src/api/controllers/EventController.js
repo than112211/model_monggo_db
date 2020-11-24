@@ -21,7 +21,7 @@ class EventControllers {
                 res.json(event);
             }
             else
-            res.json({error:'Không tìm thấy'})
+            res.json({message:'Không tìm thấy'})
         });
     }
 

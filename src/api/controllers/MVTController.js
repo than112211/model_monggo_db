@@ -12,7 +12,7 @@ class MovietimeControllers {
                 res.json(movietime);
             }
             else
-            res.json({error:'Không tìm thấy'})
+            res.json({message:'Không tìm thấy'})
         })
      
         

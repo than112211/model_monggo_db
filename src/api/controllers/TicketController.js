@@ -66,7 +66,7 @@ class TicketControllers {
                                 //                                 }       
                                  
                                   
-                            
+                                req.body.seat = JSON.parse(req.body.seat)
                                         for(var j = 0;j<movietime.movietime.seat.length;j++){ 
                                             for(var k=0;k<movietime.movietime.seat[j].length;k++) 
                                               
@@ -79,24 +79,17 @@ class TicketControllers {
                                                                             }                                                  
                                                                             }                           
                                                                          }
-                                                                     
-                                                                     
-                                 
-                                  
-                           
                                                 // nếu gift == null thì save , !nul thì giá - gift rồi save                                  
                                                 if(n==req.body.numberticket ){
                                                     // nếu ko nhập code
-                                                   if(req.body.code_gift == null){
+                                                   if(!req.body.code_gift){
                                                     req.body.hour=movietime.movietime.hour
                                                     req.body.theater=theater.theater_number
                                                     req.body.date=movietime.movietime.date
-
                                                     req.body.total_price= req.body.numberticket  * movietime.movietime.price   
                                                            req.body.paid = false          
                                                     const ticket =new Ticket(req.body);
-                                                   
-                                        
+                                                                             
                                                         ticket.save()   
                                                         movietime.save() 
                                                         // user.point= user.point+(req.body.total_price/10000 )  
@@ -116,14 +109,14 @@ class TicketControllers {
                                                     req.body.paid = false          
 
                                                             req.body.total_price= (req.body.numberticket  *  movietime.movietime.price ) - user.gift_code[i].value    
-                                                                  
+                                                            user.gift_code.splice(i,1)  
                                                             const ticket =new Ticket(req.body);
                                                    
                                                     
                                                             ticket.save()   
                                                             movietime.save() 
                                                             // user.point= user.point+(req.body.total_price/10000 )  
-                                                            // user.save()        
+                                                            user.save()        
                                                             res.json(ticket)
                                                            
                                                     setTimeout(this.deleteTicket(ticket._id),600000) // sau 10p ko thanh toán thì hủy vé
@@ -136,7 +129,7 @@ class TicketControllers {
                                                    }
                                                  }
                                               
-                                                else res.json({mess:'Vui lòng chọn đủ '+req.body.numberticket+' ghế'})
+                                                else res.json({message:'Vui lòng chọn đủ '+req.body.numberticket+' ghế'})
                         })
                         .catch(next)
                     })
@@ -161,15 +154,15 @@ class TicketControllers {
                     momo.payment(ticket._id+'1234',ticket.total_price,ticket._id+'1',ticket._id)
                     if(req.query.errorCode==0){
                         ticket.paid =true
-                        point = ticket.total_price /10000
+                            var   point = ticket.total_price /10000
                         
                         ticket.save()
                         user.point =point
                         user.save()
-                            res.json({MESS:req.query.errorCode,
+                            res.json({message:req.query.errorCode,
                                 
                                        STATUS:req.query.message })}
-                    else res.json({MESS:req.query.errorCode,
+                    else res.json({message:req.query.errorCode,
                                 
                         STATUS:req.query.message })
                            
@@ -186,6 +179,11 @@ class TicketControllers {
         .then(ticket =>{
             if(ticket.paid==false){
                 Ticket.deleteOne({_id:idticket})
+                // User.findOne({_id:ticket.user_id})
+                // .then(user =>{
+                //         user.gift_code
+                // })
+            
             }
         })
        

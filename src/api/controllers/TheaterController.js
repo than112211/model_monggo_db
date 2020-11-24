@@ -21,7 +21,7 @@ class TheaterControllers {
                 res.json(theater);
             }
             else
-            res.json({error:'Không tìm thấy'})
+            res.json({message:'Không tìm thấy'})
         });
     }
 

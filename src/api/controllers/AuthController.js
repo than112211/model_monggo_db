@@ -226,7 +226,7 @@ class AuthControllers{
             bcrypt.hash(password,10,function(err,hashedPass){
                 if(!err){
                     user.password=hashedPass
-                    res.json({message:'Mật khẩu:'+password+'.Xin vui lòng đổi lại mật khẩu để đảm bảo an toàn'})
+                    res.json({message:'Mật khẩu mới là '+password})
                     user.save()
                 }
                 else

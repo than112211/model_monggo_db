@@ -9,7 +9,7 @@ class HomeControllers {
                 res.json(movie);
             }
             else
-            res.json({error:'loi~~~'});
+            res.json({message:'Không tìm thấy phim'});
         });
 
 
