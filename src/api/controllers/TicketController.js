@@ -66,7 +66,7 @@ class TicketControllers {
                                 //                                 }       
                                  
                                   
-                                req.body.seat = JSON.parse(req.body.seat)
+                                // req.body.seat = JSON.parse(req.body.seat)
                                         for(var j = 0;j<movietime.movietime.seat.length;j++){ 
                                             for(var k=0;k<movietime.movietime.seat[j].length;k++) 
                                               
@@ -147,33 +147,65 @@ class TicketControllers {
     
        
     paymentMoMo(req,res,next){
+    
         Ticket.findOne({_id:req.params.id})
             .then(ticket=>{
-                User.findOne({_id:ticket.user_id})
-                .then(user =>{
-                    momo.payment(ticket._id+'1234',ticket.total_price,ticket._id+'1',ticket._id)
-                    if(req.query.errorCode==0){
-                        ticket.paid =true
-                            var   point = ticket.total_price /10000
-                        
-                        ticket.save()
-                        user.point =point
-                        user.save()
-                            res.json({message:req.query.errorCode,
-                                
-                                       STATUS:req.query.message })}
-                    else res.json({message:req.query.errorCode,
-                                
-                        STATUS:req.query.message })
-                           
-                })
-                .catch(next)
-                 
+        var rawSignature = "partnerCode="+process.env.PARTNER+"&accessKey="+process.env.ACCESSKEY+"&requestId="+ticket._id+"&amount="+ticket.total_price+"&orderId="+ticket._id+"&orderInfo=payment"+"&returnUrl=http://localhost:3000/ticket/paymentMoMo/resultpayment"+"&notifyUrl=http://localhost:3000/ticket/paymentMoMo/resultpayment"+"&extraData="
+        var sign=  CryptoJS.HmacSHA256(rawSignature,process.env.SECRET_KEY)
+         
+        var body=  JSON.stringify(
+        {
+            "accessKey": process.env.ACCESSKEY,
+            "partnerCode": process.env.PARTNER,
+            "requestType": "captureMoMoWallet",
+            "notifyUrl": "http://localhost:3000/ticket/paymentMoMo/resultpayment",
+            "returnUrl": "http://localhost:3000/ticket/paymentMoMo/resultpayment",
+            "orderId": ticket._id,
+            "amount": String(ticket.total_price),
+            "orderInfo": "payment",
+            "requestId":ticket._id,
+            "extraData": "",
+            "signature": String(sign)
+          })
+          var options = {
+            hostname: 'test-payment.momo.vn',
+            port: 443,
+            path: '/gw_payment/transactionProcessor',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Content-Length': Buffer.byteLength(body)
+           }
+          }
+        
+          var req = https.request(options, (resa) => {
+            console.log(`Status: ${resa.statusCode}`);
+            console.log(`Headers: ${JSON.stringify(resa.headers)}`);
+            resa.setEncoding('utf8');
+            resa.on('data', (body) => {
+              console.log('Body');
+              console.log(body);
+              console.log('URL');
+              console.log(JSON.parse(body).payUrl);
+               res.json({link:JSON.parse(body).payUrl})
+              
+            
+            })
+        })
+        
+       
+          
+          // write data to request body
+          req.write(body);
+          req.end();
+         
         })
         .catch(next)
+    }
+
    
     
-    }
+    
     deleteTicket(idticket){
         Ticket.findOne({_id:idticket})
         .then(ticket =>{
@@ -188,6 +220,32 @@ class TicketControllers {
         })
        
         
+    }
+    resultpayment(req,res,next){
+        Ticket.findOne({_id:req.query.orderId})
+            .then(ticket=>{
+                User.findOne({_id:ticket.user_id})
+                .then(user =>{
+                  
+                    if(req.query.errorCode==0){
+                        ticket.paid =true
+                        var   point = ticket.total_price /10000
+                        
+                        ticket.save()
+                        user.point =point
+                        user.save()
+                            res.json({message:req.query.errorCode,
+                                
+                     STATUS:req.query.message })}
+                    else res.json({message:req.query.errorCode,
+                                
+                        STATUS:ticket })
+                           
+                })
+                .catch(next)
+                 
+        })
+        .catch(next)
     }
 }
 
