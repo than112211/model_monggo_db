@@ -17,6 +17,7 @@ router.post('/register',authControllers.register);
 router.get('/me',authControllers.me);
 router.post('/logout',authControllers.logout);
 router.post('/logoutall',authControllers.logoutall);
+router.post('/isUsedEmail',authControllers.checkemail);
 router.post('/changepassword',authControllers.changepassword);
 router.post('/resetpassword',authControllers.resetpassword); // yêu cầu cấp lại mk
 router.get('/recieve',authControllers.recieve); // nhận lại mk

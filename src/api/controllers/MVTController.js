@@ -18,6 +18,18 @@ class MovietimeControllers {
         
     }
 
+    showByTheater(req,res,next) {
+        Movietime.find({theater:req.params.theater},function(err,movietime){
+            if(!err)  {
+                res.json(movietime);
+            }
+            else
+            res.json({message:'Không tìm thấy'})
+        })
+     
+        
+    }
+
     // tạo Movietime
     //POST /Movietime/:id movie/create      
     create(req,res,next) {     

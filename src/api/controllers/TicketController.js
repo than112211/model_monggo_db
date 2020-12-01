@@ -66,7 +66,7 @@ class TicketControllers {
                                 //                                 }       
                                  
                                   
-                                // req.body.seat = JSON.parse(req.body.seat)
+                                req.body.seat = JSON.parse(req.body.seat)
                                         for(var j = 0;j<movietime.movietime.seat.length;j++){ 
                                             for(var k=0;k<movietime.movietime.seat[j].length;k++) 
                                               
@@ -150,9 +150,8 @@ class TicketControllers {
     
         Ticket.findOne({_id:req.params.id})
             .then(ticket=>{
-        var rawSignature = "partnerCode="+process.env.PARTNER+"&accessKey="+process.env.ACCESSKEY+"&requestId="+ticket._id+"&amount="+ticket.total_price+"&orderId="+ticket._id+"&orderInfo=payment"+"&returnUrl=http://localhost:3000/ticket/paymentMoMo/resultpayment"+"&notifyUrl=http://localhost:3000/ticket/paymentMoMo/resultpayment"+"&extraData="
+        var rawSignature = "partnerCode="+process.env.PARTNER+"&accessKey="+process.env.ACCESSKEY+"&requestId="+ticket._id+"&amount="+ticket.total_price+"&orderId="+ticket._id+"&orderInfo=payment"+"&returnUrl=http://localhost:3000/ticket/paymentMoMo/resultpayment"+"&notifyUrl=http://localhost:3000/ticket/paymentMoMo/resultpayment"+"&extraData="+ticket.user_id
         var sign=  CryptoJS.HmacSHA256(rawSignature,process.env.SECRET_KEY)
-         
         var body=  JSON.stringify(
         {
             "accessKey": process.env.ACCESSKEY,
@@ -164,7 +163,7 @@ class TicketControllers {
             "amount": String(ticket.total_price),
             "orderInfo": "payment",
             "requestId":ticket._id,
-            "extraData": "",
+            "extraData": ticket.user_id,
             "signature": String(sign)
           })
           var options = {
@@ -177,7 +176,6 @@ class TicketControllers {
               'Content-Length': Buffer.byteLength(body)
            }
           }
-        
           var req = https.request(options, (resa) => {
             console.log(`Status: ${resa.statusCode}`);
             console.log(`Headers: ${JSON.stringify(resa.headers)}`);
@@ -188,13 +186,8 @@ class TicketControllers {
               console.log('URL');
               console.log(JSON.parse(body).payUrl);
                res.json({link:JSON.parse(body).payUrl})
-              
-            
             })
         })
-        
-       
-          
           // write data to request body
           req.write(body);
           req.end();
@@ -222,24 +215,23 @@ class TicketControllers {
         
     }
     resultpayment(req,res,next){
+        const token = req.header('auth-token')
         Ticket.findOne({_id:req.query.orderId})
             .then(ticket=>{
-                User.findOne({_id:ticket.user_id})
-                .then(user =>{
+                User.findOne({_id: req.query.extraData })
+                    .then(user => {
                   
                     if(req.query.errorCode==0){
                         ticket.paid =true
                         var   point = ticket.total_price /10000
-                        
                         ticket.save()
                         user.point =point
                         user.save()
-                            res.json({message:req.query.errorCode,
-                                
-                     STATUS:req.query.message })}
-                    else res.json({message:req.query.errorCode,
-                                
-                        STATUS:ticket })
+                        if(req.query.errorCode=='0' && req.query.message=='Success') {
+                            res.redirect(`http://localhost/thongBao/${req.query.errorCode}/${req.query.localMessage}`)
+                        }
+                    }
+                    else res.redirect(`http://localhost/thongBao/${req.query.errorCode}/${req.query.localMessage}`)
                            
                 })
                 .catch(next)
