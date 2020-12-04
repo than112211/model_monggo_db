@@ -2,7 +2,7 @@ const express = require('express');
 const router =express.Router();
 const mvtControllers= require('../api/controllers/MVTController');
 
-
+router.get('/all',mvtControllers.showAll)
 router.post('/:id/create',mvtControllers.create); // để lưu dữ liệu khi đăng phim mvt mới
 router.delete('/:id',mvtControllers.delete);
 router.put('/:id',mvtControllers.update);

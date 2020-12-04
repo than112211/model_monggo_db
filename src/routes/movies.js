@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage:storage})
 
-
+router.get('/id/:id',movieControllers.showByID);
 router.post('/create',upload.single('image'),movieControllers.create); // để lưu dữ liệu khi đăng phim mới
 router.delete('/:id',movieControllers.delete);
 router.get('/:slug',movieControllers.show);

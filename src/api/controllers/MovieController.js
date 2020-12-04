@@ -14,6 +14,11 @@ class MovieControllers {
         .then(movie =>  res.json(movie))
         .catch(next)
     }
+    showByID(req,res,next) {
+        Movie.findOne({_id:req.params.id})
+        .then(movie =>  res.json(movie))
+        .catch(next)
+    }
      // tạo phim
     //POST /movie/create      
     create(req,res,next) {

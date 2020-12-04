@@ -7,7 +7,6 @@ const Movietime = Schema({
   // movie,theater = id tham chiếu đến 2 bảng movie và theater
   movie_id:Schema.Types.ObjectId,
   theater_id:Schema.Types.ObjectId,
-  
   movietime:{
     date:Date,
     hour:String,
@@ -20,20 +19,6 @@ const Movietime = Schema({
       }
         ]
       ]
-    // times:[
-    // {
-    //   hour:String,
-    //   price:Number,
-    //   seat:[
-    //     [
-    //   {
-    //     id: String,
-    //     available:Boolean,
-    //   }
-    //     ]
-    //   ]
-    // }
-    //       ]
   },
       
 

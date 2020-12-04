@@ -13,10 +13,20 @@ class MovietimeControllers {
             }
             else
             res.json({message:'Không tìm thấy'})
-        })
-     
-        
+        }) 
     }
+
+    showAll(req,res,next) {
+        Movietime.find({},function(err,movietime){
+            if(!err)  {
+		movietime=movietime.filter(e=>(new Date(e.movietime.date))>=(new Date((new Date()).toLocaleDateString())))
+                res.json(movietime);
+            }
+            else
+            res.json({message:'Không tìm thấy'})
+        }) 
+    }
+
 
     showByTheater(req,res,next) {
         Movietime.find({theater:req.params.theater},function(err,movietime){
@@ -42,11 +52,6 @@ class MovietimeControllers {
            }
        }
 
-    //     for(var i=0;i<req.body.movietime.times.length;i++){
-    //     req.body.movietime.times[i].seat=seat
-    // //    req.body.times[i] ={hour:req.body.hour[i],price:req.body.price[i],seat:seat}
-    // //     req.body.movietime={times:req.body.times.concat(req.body.times[i])}
-    //    }
     req.body.movietime={date:req.body.date,
                         hour:req.body.hour,
                         price:req.body.price,
