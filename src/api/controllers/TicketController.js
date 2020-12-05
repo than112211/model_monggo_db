@@ -35,7 +35,6 @@ class TicketControllers {
         const data = jwt.verify(token, process.env.JWT_KEY)
         User.findOne({email: data.email,token: token })
         .then(user => {
-          
             req.body.user_id=user._id
              Movietime.findOne({_id:req.params.id})
             .then(movietime =>{          
@@ -44,28 +43,7 @@ class TicketControllers {
                     req.body.namemovie=movie.name
                     Theater.findOne({_id:movietime.theater_id})
                         .then(theater=>{
-                            
-                                var n=0
-                                // for(var i=0 ;i<movietime.movietime.times.length;i++){
-                                //   if(  movietime.movietime.times[i]._id==req.params.time){      
-                                //         hour=movietime.movietime.times[i].hour
-                                //         price=movietime.movietime.times[i].price
-                                //         for(var j = 0;j<movietime.movietime.times[i].seat.length;j++){ 
-                                //             for(var k=0;k<movietime.movietime.times[i].seat[j].length;k++) 
-                                              
-                                //                     for(var s=0;s<req.body.seat.length;s++){
-                                //                         if(movietime.movietime.times[i].seat[j][k].id==req.body.seat[s]){
-                                //                             if( movietime.movietime.times[i].seat[j][k].available==false){                                                  
-                                //                                 movietime.movietime.times[i].seat[j][k].available=true
-                                //                                 n+=1            
-                                //                                                 }  
-                                //                                             }                                                  
-                                //                                             }                           
-                                //                                          }
-                                //                                     } 
-                                //                                 }       
-                                 
-                                  
+                                var n=0                        
                                 // req.body.seat = JSON.parse(req.body.seat)
                                         for(var j = 0;j<movietime.movietime.seat.length;j++){ 
                                             for(var k=0;k<movietime.movietime.seat[j].length;k++) 
@@ -92,10 +70,17 @@ class TicketControllers {
                                                                              
                                                         ticket.save()   
                                                         movietime.save() 
-                                                        // user.point= user.point+(req.body.total_price/10000 )  
-                                                        // user.save()        
+                                                          
                                                         res.json(ticket)
-                                                    setTimeout(this.deleteTicket(ticket._id),600000) // sau 10p ko thanh toán thì hủy vé
+                                                    setTimeout(function deleteTicket(){
+                                                        Ticket.findOne({_id:ticket._id})
+                                                    .then(ticket =>{
+                                                                               
+                                                        if(ticket.paid==false){
+                                                            Ticket.deleteOne({_id:ticket._id})
+                                                            console.log('deleted')
+                                                        }}
+                                                        )},10000) // sau 10p ko thanh toán thì hủy vé
                                             
                                                    
                                                    }
@@ -115,11 +100,18 @@ class TicketControllers {
                                                     
                                                             ticket.save()   
                                                             movietime.save() 
-                                                            // user.point= user.point+(req.body.total_price/10000 )  
                                                             user.save()        
                                                             res.json(ticket)
-                                                           
-                                                    setTimeout(this.deleteTicket(ticket._id),600000) // sau 10p ko thanh toán thì hủy vé
+                                                            setTimeout(function deleteTicket(){
+                                                                Ticket.findOne({_id:ticket._id})
+                                                            .then(ticket =>{
+                                                                                       
+                                                                if(ticket.paid==false){
+                                                                    Ticket.deleteOne({_id:ticket._id})
+                                                                    console.log('deleted')
+                                                                }}
+                                                                )},10000) // sau 10p ko thanh toán thì hủy vé
+                                                    
                                             
                                                            }
                                                            else  res.json({message:'Code không đúng, Kiểm tra lại'})
@@ -146,7 +138,7 @@ class TicketControllers {
 
     
        
-    paymentMoMo(req,res,next){
+    paymentMoMo(req,response,next){
     
         Ticket.findOne({_id:req.params.id})
             .then(ticket=>{
@@ -178,48 +170,22 @@ class TicketControllers {
            }
           }
         
-          var req = https.request(options, (resa) => {
-            console.log(`Status: ${resa.statusCode}`);
-            console.log(`Headers: ${JSON.stringify(resa.headers)}`);
-            resa.setEncoding('utf8');
-            resa.on('data', (body) => {
+          var reqe = https.request(options, (res) => {
+            console.log(`Status: ${res.statusCode}`);
+            console.log(`Headers: ${JSON.stringify(res.headers)}`);
+            res.setEncoding('utf8');
+            res.on('data', (body) => {
               console.log('Body');
               console.log(body);
               console.log('URL');
               console.log(JSON.parse(body).payUrl);
-               res.json({link:JSON.parse(body).payUrl})
-              
-            
+              response.json({link:JSON.parse(body).payUrl})
             })
         })
-        
-       
-          
-          // write data to request body
-          req.write(body);
-          req.end();
-         
+          reqe.write(body);
+          reqe.end();        
         })
         .catch(next)
-    }
-
-   
-    
-    
-    deleteTicket(idticket){
-        Ticket.findOne({_id:idticket})
-        .then(ticket =>{
-            if(ticket.paid==false){
-                Ticket.deleteOne({_id:idticket})
-                // User.findOne({_id:ticket.user_id})
-                // .then(user =>{
-                //         user.gift_code
-                // })
-            
-            }
-        })
-       
-        
     }
     resultpayment(req,res,next){
         Ticket.findOne({_id:req.query.orderId})
@@ -239,7 +205,7 @@ class TicketControllers {
                      STATUS:req.query.message })}
                     else res.json({message:req.query.errorCode,
                                 
-                        STATUS:ticket })
+                        STATUS:req.query.message})
                            
                 })
                 .catch(next)
@@ -247,6 +213,7 @@ class TicketControllers {
         })
         .catch(next)
     }
+ 
 }
 
 

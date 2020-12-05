@@ -54,5 +54,20 @@ var body=  JSON.stringify(
 
   req.end();
 }
+deleteTicket(idticket){
+  Ticket.findOne({_id:idticket})
+  .then(ticket =>{
+      if(ticket.paid==false){
+          Ticket.deleteOne({_id:ticket._id})
+          // User.findOne({_id:ticket.user_id})
+          // .then(user =>{
+          //         user.gift_code
+          // })
+      
+      }
+  })
+ 
+  
+}
 }
 module.exports = new GiftControllers;
