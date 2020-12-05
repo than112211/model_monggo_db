@@ -80,7 +80,6 @@ class TicketControllers {
                                                                     if(ticket.paid==false){
                                                                     Ticket.deleteOne({_id:ticket._id})
                                                                     console.log('deleted')
-                                                                    ticket.save()
                                                             }}
                                                             )},6000,ticket._id) // sau 10p ko thanh toán thì hủy vé
                                                 
