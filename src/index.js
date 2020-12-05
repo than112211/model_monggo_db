@@ -6,7 +6,6 @@ var methodOverride = require('method-override')
 const db=require('./config/db');
 const { query } = require('express');
 const app = express();
-const port = 3000
 const route = require('./routes')
 var cors = require('cors')
 var validator = require('validator')
@@ -47,7 +46,4 @@ route(app); // khởi tạo route
 // phương thức get là muốn nhận dữ liệu từ sever về cho client / khi submit thì dữ liệu hiện trên url có biến là name"""
 // phương thức post là gữi dữ liệu từ client lên sever        / khi submit thì dữ liệu ẩn có biến là name"""
 
-app.listen(port, () => {
-  console.log(`app listening at http://localhost:${port}`)
-})
-// run code = node + trang can runnod.
+module.exports = app
