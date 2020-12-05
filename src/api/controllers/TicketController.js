@@ -14,7 +14,7 @@ require('dotenv').config()
 class TicketControllers {
 
      //get /Ticket/  //view history ticket
-     
+    
      show(req,res,next) {
         const token = req.header('auth-token')
         const data = jwt.verify(token, process.env.JWT_KEY)
@@ -27,7 +27,7 @@ class TicketControllers {
     })
        
     }
-   
+  
     //POST /Ticket/:id movietime/create     
     create(req,res,next) {
        
@@ -72,16 +72,18 @@ class TicketControllers {
                                                         movietime.save() 
                                                           
                                                         res.json(ticket)
-                                                    setTimeout(function deleteTicket(){
-                                                        Ticket.findOne({_id:ticket._id})
-                                                    .then(ticket =>{
-                                                                               
-                                                        if(ticket.paid==false){
-                                                            Ticket.deleteOne({_id:ticket._id})
-                                                            console.log('deleted')
-                                                        }}
-                                                        )},10000) // sau 10p ko thanh toán thì hủy vé
-                                            
+
+                                                        setTimeout(function deleteTicket(ticket){
+                                                            Ticket.findOne({_id:ticket})
+                                                                .then(ticket =>{
+                                                                    console.log(ticket)         
+                                                                    if(ticket.paid==false){
+                                                                    Ticket.deleteOne({_id:ticket._id})
+                                                                    console.log('deleted')
+                                                                    ticket.save()
+                                                            }}
+                                                            )},6000,ticket._id) // sau 10p ko thanh toán thì hủy vé
+                                                
                                                    
                                                    }
                                                    else{      // nếu nhập code
@@ -102,15 +104,16 @@ class TicketControllers {
                                                             movietime.save() 
                                                             user.save()        
                                                             res.json(ticket)
-                                                            setTimeout(function deleteTicket(){
-                                                                Ticket.findOne({_id:ticket._id})
-                                                            .then(ticket =>{
-                                                                                       
-                                                                if(ticket.paid==false){
-                                                                    Ticket.deleteOne({_id:ticket._id})
-                                                                    console.log('deleted')
+
+                                                            setTimeout(function deleteTicket(ticket){
+                                                                Ticket.findOne({_id:ticket})
+                                                                    .then(ticket =>{
+                                                                        console.log(ticket)         
+                                                                        if(ticket.paid==false){
+                                                                        Ticket.deleteOne({_id:ticket._id})
+                                                                        console.log('deleted')
                                                                 }}
-                                                                )},10000) // sau 10p ko thanh toán thì hủy vé
+                                                                )},6000,ticket._id) // sau 10p ko thanh toán thì hủy vé
                                                     
                                             
                                                            }
@@ -134,10 +137,6 @@ class TicketControllers {
          .catch(next)
     }
 
-
-
-    
-       
     paymentMoMo(req,response,next){
     
         Ticket.findOne({_id:req.params.id})
