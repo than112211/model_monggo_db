@@ -72,18 +72,29 @@ class TicketControllers {
                                                         movietime.save() 
                                                           
                                                         res.json(ticket)
-
-                                                        setTimeout(function deleteTicket(ticket){
-                                                            Ticket.findOne({_id:ticket})
+                                                            function deleteticket(ticketid){
+                                                                Ticket.findOne({_id:ticketid})
                                                                 .then(ticket =>{
-                                                                    console.log(ticket)         
                                                                     if(ticket.paid==false){
                                                                     Ticket.deleteOne({_id:ticket._id})
-                                                                    console.log('deleted')
-                                                            }}
-                                                            )},6000,ticket._id) // sau 10p ko thanh toán thì hủy vé
-                                                
-                                                   
+                                                                    .then (()=>{
+                                                                        Movietime.findOne({_id:req.params.id})
+                                                                            .then(movietime =>{ 
+                                                                                for(var j = 0;j<movietime.movietime.seat.length;j++){ 
+                                                                                    for(var k=0;k<movietime.movietime.seat[j].length;k++) 
+                                                                                            for(var s=0;s<ticket.seat.length;s++){
+                                                                                                if(movietime.movietime.seat[j][k].id==ticket.seat[s]){
+                                                                                                movietime.movietime.seat[j][k].available=false                                            
+                                                                                                }
+                                                                                            }}
+                                                                                            movietime.save()
+                                                                            })
+                                                                    }
+                                                                    )                    
+                                                            }                                                                 
+                                                        })}        
+                                                        setTimeout(deleteticket,600000,ticket._id)
+                                                      
                                                    }
                                                    else{      // nếu nhập code
                                                        for(var i=0;i<user.gift_code.length;i++){
@@ -104,17 +115,29 @@ class TicketControllers {
                                                             user.save()        
                                                             res.json(ticket)
 
-                                                            setTimeout(function deleteTicket(ticket){
-                                                                Ticket.findOne({_id:ticket})
-                                                                    .then(ticket =>{
-                                                                        console.log(ticket)         
-                                                                        if(ticket.paid==false){
-                                                                        Ticket.deleteOne({_id:ticket._id})
-                                                                        console.log('deleted')
-                                                                }}
-                                                                )},6000,ticket._id) // sau 10p ko thanh toán thì hủy vé
-                                                    
-                                            
+                                                            function deleteticket(ticketid){
+                                                                Ticket.findOne({_id:ticketid})
+                                                                .then(ticket =>{
+                                                                    if(ticket.paid==false){
+                                                                    Ticket.deleteOne({_id:ticket._id})
+                                                                    .then (()=>{
+                                                                        Movietime.findOne({_id:req.params.id})
+                                                                            .then(movietime =>{ 
+                                                                                for(var j = 0;j<movietime.movietime.seat.length;j++){ 
+                                                                                    for(var k=0;k<movietime.movietime.seat[j].length;k++) 
+                                                                                            for(var s=0;s<ticket.seat.length;s++){
+                                                                                                if(movietime.movietime.seat[j][k].id==ticket.seat[s]){
+                                                                                                movietime.movietime.seat[j][k].available=false                                            
+                                                                                                }
+                                                                                            }}
+                                                                                            movietime.save()
+                                                                            })
+                                                                    }
+                                                                    )                    
+                                                            }                                                                 
+                                                        })}        
+                                                        setTimeout(deleteticket,600000,ticket._id)
+
                                                            }
                                                            else  res.json({message:'Code không đúng, Kiểm tra lại'})
                                                        }
@@ -212,6 +235,7 @@ class TicketControllers {
         .catch(next)
     }
  
+
 }
 
 
