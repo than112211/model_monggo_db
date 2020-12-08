@@ -29,8 +29,11 @@ class EventControllers {
     // tạo event
     //POST /event/create      
     create(req,res,next) {
-        req.body.image = req.file.path
-        req.body.cover_image =req.file.path
+        req.body.image = req.files[0].path
+        req.body.cover_image =req.files[1].path
+        
+        console.log(req.files)
+       
         req.body.date={date_start:req.body.date_start,date_end:req.body.date_end}
      const event =new Event(req.body);
     event.save()
@@ -42,7 +45,10 @@ class EventControllers {
     //PUT /event/:id 
     // PUT là method để chỉnh sửa
      update(req,res,next) {
-        req.body.image = req.file.path
+        req.body.image = req.files[0].path
+        req.body.cover_image =req.files[1].path
+        
+        console.log(req.files)
         req.body.date={date_start:req.body.date_start,date_end:req.body.date_end}
 
         Event.updateOne({_id:req.params.id} ,req.body) // điều kiện , reqbody là các bản ghi để sữa

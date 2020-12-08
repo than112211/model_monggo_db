@@ -10,10 +10,11 @@ const storage = multer.diskStorage({
         cb(null,file.originalname)
     }
 })
-const upload = multer({storage:storage})
 
+
+const upload = multer({storage:storage})
 router.get('/all',eventControllers.index);
-router.post('/create',upload.single('image'),eventControllers.create); // để lưu dữ liệu khi đăng phim event mới
+router.post('/create',upload.array('image',2),eventControllers.create); // để lưu dữ liệu khi đăng phim event mới
 router.delete('/:id',eventControllers.delete);
 router.put('/:id',upload.single('image'),eventControllers.update);
 router.get('/:slug',eventControllers.show);
