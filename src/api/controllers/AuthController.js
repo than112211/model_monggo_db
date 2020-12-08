@@ -38,7 +38,7 @@ class AuthControllers{
             }
             const formData = req.body
             formData.point=0
-            formData.avartar='src/resoures/defaulavartar.jpg'
+            formData.avartar='src/resoures/defaulavartar.png'
             formData.password = hashedPass
             formData.isVerified = false
             formData.token= jwt.sign({email :req.body.email},process.env.JWT_KEY,{expiresIn:'1h'})                         
