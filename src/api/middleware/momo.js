@@ -15,8 +15,8 @@ var body=  JSON.stringify(
     "accessKey": process.env.ACCESSKEY,
     "partnerCode": process.env.PARTNER,
     "requestType": "captureMoMoWallet",
-    "notifyUrl": "http://localhost:3000/ticket/paymentMoMo/"+returnUrl,
-    "returnUrl": "http://localhost:3000/ticket/paymentMoMo/"+returnUrl,
+    "notifyUrl": "http://localhost:8080/ticket/paymentMoMo/"+returnUrl,
+    "returnUrl": "http://localhost:8080/ticket/paymentMoMo/"+returnUrl,
     "orderId": orderId,
     "amount": String(amount),
     "orderInfo": "payment",
@@ -44,7 +44,6 @@ var body=  JSON.stringify(
       console.log(body);
       console.log('URL');
       console.log(JSON.parse(body).payUrl);
-    
     })
 })
   

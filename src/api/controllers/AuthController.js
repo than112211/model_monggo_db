@@ -29,8 +29,6 @@ register(req, res, next){
                 res.json({ message: 'email đã đc sử dụng đăng kí cho tk khác' })
             }
             else {
-
-
                 bcrypt.hash(req.body.password, 10, function (err, hashedPass) {
                     if (err) {
                         res.json({ message: 'ko mã hóa đc mk' })
@@ -64,8 +62,6 @@ register(req, res, next){
 
 // POST account/login
 login(req, res, next){
-
-
     User.findOne({ email: req.body.email })
         .then(user => {
             if (user) {
@@ -76,18 +72,11 @@ login(req, res, next){
                     if (result) {
                         var token = jwt.sign({ email: user.email }, process.env.JWT_KEY, { expiresIn: '1h' })
                         res.json({ message: 'login succes', token })
-                        // for(var i=1 ; i<10 ;i++){
-                        //     if(user.token[i]=null){
                         user.token = user.token.concat(token)
                         user.save()
-                        // }
-                        // }
-
                     }
                     else res.json({ message: 'Mật khẩu sai' })
                 })
-
-
             }
             else res.json({ message: 'Không tìm thấy' })
         })
@@ -103,12 +92,9 @@ verify(req, res, next){
                 user.isVerified = true,
                     user.save()
                 res.render('email.html')
-                // res.json({message:'xác nhận thành công'})
             }
             else {
-                // res.json({message:'tài khoản đã đc xác nhận trưóc đó'})
                 res.render('email.html')
-                // res.sendFile('/src/view',path.join(__dirname,'view','email.html'));
             }
         }
         )
@@ -123,11 +109,8 @@ update(req, res, next) {
     const token = req.header('auth-token')
     const data = jwt.verify(token, process.env.JWT_KEY)
     Movie.updateOne({ email: data.email }, req.body) // điều kiện , formdata là các bản ghi để sữa
-
         .then(() => res.json({ message: 'Đã cập nhập' }))
-
         .catch(next)
-
 }
 
 // GET account/me
@@ -137,8 +120,6 @@ me(req, res, next){
     User.findOne({ email: data.email, token: token })
         .then(user => res.json(user))
         .catch(next)
-
-
 }
 // POST account/logout  1 device
 logout(req, res, next){
@@ -204,7 +185,6 @@ changepassword(req, res, next){
 }
 
 resetpassword(req, res, next){
-
     User.findOne({ email: req.body.email }, function (err, user) {
         if (!err) {
             const msg = {
