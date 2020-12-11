@@ -9,6 +9,8 @@ const https = require('https');
 const crypto = require('crypto');
 const CryptoJS = require("crypto-js");
 const momo = require('../middleware/momo')
+const sgMail = require('@sendgrid/mail')
+
 require('dotenv').config()
 
 class TicketControllers {
@@ -72,6 +74,24 @@ class TicketControllers {
                                                         movietime.save() 
                                                           
                                                         res.json(ticket)
+                                                        const msg = {
+                                                            to: user.email, // Change to your recipienttie
+                                                            from: 'than123456qwe@gmail.com', // Change to your verified sender
+                                                            subject: 'Thông tin vé',
+                                                            text: 'Tìm mật khẩu',
+                                                            html: `<h1>Thông tin vé của bạn</h1>
+                                                            <ul>
+                                                            <li>Tên phim :${ticket.namemovie}</li>
+                                                            <li>Ngày:${ticket.date}</li>
+                                                            <li>Gio:${ticket.hour}</li>
+                                                            <li>Số ghế:${ticket.seat}</li>
+                                                            <li>Tổng tiền:${ticket.total_price}</li>
+                                                         </ul>
+                                                         <p>Cảm ơn đã sử dụng dịch vụ của chúng tôi</p>
+                                                            `,
+                                                          }
+                                                        sgMail.send(msg)
+                                                       
                                                             function deleteticket(ticketid){
                                                                 Ticket.findOne({_id:ticketid})
                                                                 .then(ticket =>{
@@ -114,7 +134,23 @@ class TicketControllers {
                                                             movietime.save() 
                                                             user.save()        
                                                             res.json(ticket)
-
+                                                            const msg = {
+                                                                to: user.email, // Change to your recipienttie
+                                                                from: 'than123456qwe@gmail.com', // Change to your verified sender
+                                                                subject: 'Thông tin vé',
+                                                                text: 'Tìm mật khẩu',
+                                                                html: `<h1>Thông tin vé của bạn</h1>
+                                                                <ul>
+                                                                <li>Tên phim :${ticket.namemovie}</li>
+                                                                <li>Ngày:${ticket.date}</li>
+                                                                <li>Gio:${ticket.hour}</li>
+                                                                <li>Số ghế:${ticket.seat}</li>
+                                                                <li>Tổng tiền:${ticket.total_price}</li>
+                                                             </ul>
+                                                             <p>Cảm ơn đã sử dụng dịch vụ của chúng tôi</p>
+                                                                `,
+                                                              }
+                                                            sgMail.send(msg)
                                                             function deleteticket(ticketid){
                                                                 Ticket.findOne({_id:ticketid})
                                                                 .then(ticket =>{
