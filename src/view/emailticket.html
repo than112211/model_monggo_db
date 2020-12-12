@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+</head>
+
+<body style="background-color: #f2f2f233">
+    <div class="container">
+        <div style="
+          height: 80px;
+          text-align: center;
+          display: flex;
+          justify-content: center;
+          border: unset;
+          margin-top: 30px;
+        ">
+            <img src="http://35.193.164.249/src/resoures/logo.png" height="60px" alt="ảnh logo" />
+        </div>
+        <div style="padding: 30px;
+        border-radius: 10px;
+        border: 2px solid #e0e0e0; background-color: white;">
+            <div style="    width: 60%;
+            margin-left: 20%;
+        ">
+                <div style="
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+          ">
+                    <img width="300px" src="http://35.193.164.249/${this.state.movie.name}" />
+                    <div style="text-align:start;">
+                        <h3 style="
+                    font-size: 24px;
+                ">${this.state.movie.name}</h3>
+                        <p>
+                            Ngày chiếu:
+                            <b>{ngayChieuPhim.getDate() + "/" + ngayChieuPhim.getMonth() + "/"
+                                + ngayChieuPhim.getFullYear()}</b>
+                        </p>
+                        <p>Giờ chiếu: <b>{this.state.movietime.movietime.hour}</b></p>
+                        <p>Giá vé: <b>{this.state.movietime.movietime.price}đ</b></p>
+                        <p>Ghế đã chọn: <b>{this.state.chosenSeats.toString()}</b></p>
+                        <p>Số ghế đã chọn: <b>{this.state.chosenSeats.length}</b></p>
+                        <p>
+                            <b>Tổng: {this.state.movietime.movietime.price *
+                                this.state.chosenSeats.length}đ</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <p style="
+            margin-left: 8%;
+            margin-top: 0.1%;
+            margin-right: 5%;
+            height: 30px;
+          ">
+                <strong>Cảm ơn bạn đã sử dụng dịch vụ của Lê Độ Cinema</strong>
+            </p>
+            <p style="margin-left: 8%; margin-right: 10%; height: 10px">
+                Trân trọng,
+            </p>
+            <p style="margin-left: 8%; margin-right: 10%">
+                <strong>The Le Do Cinema team.</strong>
+            </p>
+            <br />
+        </div>
+        <div style="
+          text-align: center;
+          display: flex;
+          justify-content: center;
+          margin-top: 10px;
+        ">
+            <p>Bạn chưa có tài khoản? <a href="">Đăng ký tại đây</a></p>
+        </div>
+    </div>
+</body>
+
+</html>

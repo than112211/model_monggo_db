@@ -47,10 +47,49 @@ register(req, res, next){
                         to: user.email, // Change to your recipient
                         from: 'than123456qwe@gmail.com', // Change to your verified sender
                         subject: 'Xác minh tài khoản Le Do Cinema',
-                        html: `<h4>Xin chào ${req.body.name},</h4>
-                <p>Chúc mừng bạn trở thành thành viên Lê Độ Cinema - Tích điểm ngay nhận quà liền tay.
-                Bạn có thể đăng nhập dễ dàng vào tài khoản Galaxy để cập nhập các chương trình ưu đãi đặc biệt dành riêng cho bạn </p>
-                <a href="http://${req.headers.host}/account/verify?token=${user.token}">Vui lòng nhấn vào đây để xác nhận</a>`,
+                        html: `
+                        <div style="display: flex;">
+                            <div style="width: 50%; margin-left: 25%; ">
+                                <div style="height: 80px;
+                                text-align: center;
+                                justify-content: center;
+                                display: block;
+                                justify-content: center; border: unset; margin-top: 30px;">
+                                    <img class="img" src="http://35.193.164.249/src/resoures/logo.png" height="60px" alt="ảnh logo">
+                                </div>
+                                <div style="padding: 30px;
+                                border-radius: 10px;
+                                border: 2px solid #e0e0e0; background-color: white;">
+                                    <div style="height: 130px;
+                                    text-align: center;
+                                    justify-content: center;
+                                    display: block;
+                                    justify-content: center; margin-top: 10px;">
+                                        <img src="http://35.193.164.249/src/resoures/email1.png" style="height: 120px;">
+                                    </div>
+                                    <h4 style="margin-left: 8%;margin-top: 0.1%;margin-right: 5%;">Xin chào ${req.body.name},</h4>
+                                    <a style="margin-left: 8%; margin-top: 20px; margin-right: 5%; margin-bottom: 20px; display: block;"
+                                        href="http://${req.headers.host}/account/verify?token=${user.token}">Vui lòng nhấn vào đây để xác
+                                        nhận</a>
+                                    <p style="margin-left: 8%;margin-top: 0.1%;margin-right: 5%;height: 30px;"><strong>Cảm ơn bạn đã tham gia
+                                            website của chúng tôi!</strong></p>
+                                    <p style="margin-left: 8%;margin-right: 10%;height: 50px;">Chúc mừng bạn đã trở thành thành viên của
+                                        <strong>Lê Độ Cinema </strong>- Tích điểm ngay nhận quà liền tay.</p>
+                                    <p style="margin-left: 8%;margin-right: 10%;height: 50px;">Bạn có thể đăng nhập dễ dàng vào tài khoản
+                                        <strong>Lê Độ </strong>- để cập nhật các chương trình ưu đãi đặc biệt dành riêng cho bạn.</p>
+                        
+                                    <p style="margin-left: 8%;margin-right: 10%;height: 10px;">Trân trọng,</p>
+                                    <p style="margin-left: 8%;margin-right: 10%;"><strong>The Le Do Cinema team.</strong></p>
+                                    <br />
+                                </div>
+                                <div style="text-align: center;
+                                display: block; 
+                                justify-content: center; 
+                                margin-top: 10px;">
+                                    <p>Bạn chưa có tài khoản? <a href="http://localhost/">Đăng ký tại đây</a></p>
+                                </div>
+                            </div>
+                        </div>`,
                     }
                     sgMail.send(msg)
                         .then(() => res.json({ message: 'đăng kí thành công' }))

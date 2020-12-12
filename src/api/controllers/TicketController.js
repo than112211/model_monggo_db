@@ -9,6 +9,7 @@ const https = require('https');
 const crypto = require('crypto');
 const CryptoJS = require("crypto-js");
 const momo = require('../middleware/momo')
+const sgMail = require('@sendgrid/mail')
 require('dotenv').config()
 
 class TicketControllers {
@@ -214,26 +215,99 @@ class TicketControllers {
             .then(ticket => {
                 User.findOne({ _id: ticket.user_id })
                     .then(user => {
+                        Movie.findOne({ name: ticket.namemovie })
+                            .then(movie => {
+                                if (req.query.errorCode == 0) {
+                                    ticket.paid = true
+                                    var point = ticket.total_price / 10000
 
-                        if (req.query.errorCode == 0) {
-                            ticket.paid = true
-                            var point = ticket.total_price / 10000
-
-                            ticket.save()
-                            user.point = point
-                            user.save()
-                            res.json({
-                                message: req.query.errorCode,
-
-                                STATUS: req.query.message
+                                    ticket.save()
+                                    const ngayChieuPhim = new Date(ticket.date)
+                                    let image = movie.image
+                                    if(String(movie.image).indexOf("http")<0) image="http://35.193.164.249/"+String(movie.image).replace("\\","/")
+                                    user.point = point
+                                    user.save()
+                                    const msg = {
+                                        to: user.email, // Change to your recipienttie
+                                        from: 'than123456qwe@gmail.com', // Change to your verified sender
+                                        subject: '[Lê Độ Cinema] Thông tin vé ',
+                                        text: 'Tìm mật khẩu',
+                                        html: `<div style="display: flex;">
+                                        <div style="width: 60%; margin-left: 20%; ">
+                                    <div style="
+                                      height: 80px;
+                                      text-align: center;
+                                      display: block;
+                                      justify-content: center;
+                                      border: unset;
+                                      margin-top: 30px;
+                                    ">
+                                        <img src="http://35.193.164.249/src/resoures/logo.png" height="60px" alt="ảnh logo" />
+                                    </div>
+                                    <div style="padding: 30px;
+                                    border-radius: 10px;
+                                    border: 2px solid #e0e0e0; background-color: white;">
+                                        <div style="    width: 70%;
+                                        margin-left: 15%;
+                                    ">
+                                            <div style="
+                                        text-align: center;
+                                        display: flex;
+                                        justify-content: center;
+                                        margin-top: 10px;
+                                      ">
+                                                <img width="300px" src="${image.toString()}" />
+                                                <div style="text-align:start;">
+                                                    <h3 style="
+                                                font-size: 24px; margin: 0;
+                                            ">${ticket.namemovie}</h3>
+                                                    <p>
+                                                        Ngày chiếu:
+                                                        <b>${ngayChieuPhim.getDate() + "/" + ngayChieuPhim.getMonth() + "/"
+                                                            + ngayChieuPhim.getFullYear()}</b>
+                                                    </p>
+                                                    <p>Giờ chiếu: <b>${ticket.hour}</b></p>
+                                                    <p>Giá vé: <b>${ticket.total_price/ticket.numberticket}đ</b></p>
+                                                    <p>Ghế đã chọn: <b>${ticket.seat.toString()}</b></p>
+                                                    <p>Số ghế đã chọn: <b>${ticket.numberticket}</b></p>
+                                                    <p>
+                                                        <b>Tổng: ${ticket.total_price}đ</b>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p style="
+                                        margin-left: 8%;
+                                        margin-top: 0.1%;
+                                        margin-right: 5%;
+                                        height: 30px;
+                                      ">
+                                            <strong>Cảm ơn bạn đã sử dụng dịch vụ của Lê Độ Cinema</strong>
+                                        </p>
+                                        <p style="margin-left: 8%; margin-right: 10%; height: 10px">
+                                            Trân trọng,
+                                        </p>
+                                        <p style="margin-left: 8%; margin-right: 10%">
+                                            <strong>The Le Do Cinema team.</strong>
+                                        </p>
+                                        <br />
+                                    </div>
+                                    <div style="
+                                      text-align: center;
+                                      display: block;
+                                      justify-content: center;
+                                      margin-top: 10px;
+                                    ">
+                                        <p>Bạn chưa có tài khoản? <a href="">Đăng ký tại đây</a></p>
+                                    </div>
+                                </div>
+                            </div>`,
+                                    }
+                                    sgMail.send(msg)
+                                    res.redirect('http://localhost#success')
+                                }
+                                else res.redirect('http://localhost#fail')
                             })
-                        }
-                        else res.json({
-                            message: req.query.errorCode,
-
-                            STATUS: req.query.message
-                        })
-
                     })
                     .catch(next)
 
