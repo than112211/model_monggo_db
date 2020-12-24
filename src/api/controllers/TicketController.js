@@ -224,7 +224,7 @@ class TicketControllers {
                                     ticket.save()
                                     const ngayChieuPhim = new Date(ticket.date)
                                     let image = movie.image
-                                    if(String(movie.image).indexOf("http")<0) image="http://35.193.164.249/"+String(movie.image).replace("\\","/")
+                                    if(String(movie.image).indexOf("http")<0) image="http://35.193.164.249/"+String(movie.image).replace("\\","/").replace("\\","/")
                                     user.point = point
                                     user.save()
                                     const msg = {
@@ -248,7 +248,7 @@ class TicketControllers {
                                     border-radius: 10px;
                                     border: 2px solid #e0e0e0; background-color: white;">
                                         <div style="    width: 70%;
-                                        margin-left: 15%;
+                                        margin-left: 15%; margin-bottom: 30px;
                                     ">
                                             <div style="
                                         text-align: center;
@@ -256,8 +256,8 @@ class TicketControllers {
                                         justify-content: center;
                                         margin-top: 10px;
                                       ">
-                                                <img width="300px" src="${image.toString()}" />
-                                                <div style="text-align:start;">
+                                                <img width="180px" src="${image.toString()}" />
+                                                <div style="text-align:start; margin-left: 20px;">
                                                     <h3 style="
                                                 font-size: 24px; margin: 0;
                                             ">${ticket.namemovie}</h3>

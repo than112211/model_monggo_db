@@ -133,7 +133,7 @@ verify(req, res, next){
                 res.render('email.html')
             }
             else {
-                res.render('email.html')
+                res.redirect('http://localhost')
             }
         }
         )
