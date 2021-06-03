@@ -14,8 +14,14 @@ const upload = multer({storage:storage})
 
 
 router.post('/create',upload.single('image'),movieControllers.create); // để lưu dữ liệu khi đăng phim mới
+router.get('/now',movieControllers.now);
+router.get('/comming',movieControllers.comming);
+router.get('/playing',movieControllers.playing);
+router.get('/soon',movieControllers.soon);
+
 router.delete('/:id',movieControllers.delete);
 router.get('/:slug',movieControllers.show);
+
 router.put('/:id/dangchieu',movieControllers.dangchieu);
 router.put('/:id/sapchieu',movieControllers.sapchieu);
 router.put('/:id',upload.single('image'),movieControllers.update);

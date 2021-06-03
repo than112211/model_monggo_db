@@ -27,7 +27,7 @@ class AuthControllers{
         User.findOne({email:req.body.email})
         .then(user =>{
             if(user){
-    res.json({message:'email đã đc sử dụng đăng kí cho tk khác'})
+        res.json({message:'Email đã tồn tại'})
                 }
             else{
       
@@ -41,7 +41,8 @@ class AuthControllers{
             formData.avartar='src/resoures/defaulavartar.png'
             formData.password = hashedPass
             formData.isVerified = false
-            formData.token= jwt.sign({email :req.body.email},process.env.JWT_KEY,{expiresIn:'1h'})                         
+            const token= jwt.sign({email :req.body.email},process.env.JWT_KEY,{expiresIn:'1h'})   
+            formData.token = token                      
             const user = new User(formData)
             user.save()
             // gữi email
@@ -56,7 +57,7 @@ class AuthControllers{
                 <a href="http://${req.headers.host}/account/verify?token=${user.token}">Vui lòng nhấn vào đây để xác nhận</a>`,
               }
             sgMail.send(msg)
-            .then(() => res.json({message:'đăng kí thành công'}))
+            .then(() => res.json({message:'Đăng kí thành công',user:user,token:token}))
             .catch(next)          
         })
     }})
@@ -74,12 +75,13 @@ class AuthControllers{
                         res.json({message:'Lỗi đăng nhập'})
                     }
                     if(result){
-                       var token = jwt.sign({email: user.email},process.env.JWT_KEY,{expiresIn:'1h'})                         
-                        res.json({message:'login succes',token})
+                       const token = jwt.sign({email: user.email},process.env.JWT_KEY,{expiresIn:'1h'})                         
                         // for(var i=1 ; i<10 ;i++){
                         //     if(user.token[i]=null){
                         user.token=user.token.concat(token)
                         user.save()
+                        res.json({message:'Đăng nhập thành công',user:user,token:token})
+
                     // }
                     // }
                                   

@@ -1,8 +1,8 @@
 
-const Movie = require('../models/Movie')
+const News = require('../models/News')
 
 
-class MovieControllers {
+class NewsController {
 
 
  
@@ -14,40 +14,10 @@ class MovieControllers {
         .then(movie =>  res.json(movie))
         .catch(next)
     }
-    now(req,res,next) {
-        Movie.find({playing :true})
+    all(req,res,next) {
+        News.find({})
         // nhận về colecttion movie theo slug
-        .then(movie =>  res.json(movie.splice(0,6)))
-        .catch(next)
-    }
-    playing(req,res,next) {
-        const page = req.query.page
-        const limit = req.query.limit
-        const start = (page -1 ) * limit
-        const end = page * limit
-        Movie.find({playing :true})
-        // nhận về colecttion movie theo slug
-        .then(movie => {
-            res.json({
-                movie:movie.slice(start,end),
-                total:movie.length
-            })
-        })
-        .catch(next)
-    }
-    soon(req,res,next) {
-        const page = req.query.page
-        const limit = req.query.limit
-        const start = (page -1 ) * limit
-        const end = page * limit
-        Movie.find({playing :false})
-        // nhận về colecttion movie theo slug
-        .then(movie => {
-            res.json({
-                movie:movie.slice(start,end),
-                total:movie.length
-            })
-        })
+        .then(news => res.json(news.splice(0,req.params.number)))
         .catch(next)
     }
     comming(req,res,next) {
@@ -60,10 +30,8 @@ class MovieControllers {
     //POST /movie/create      
     create(req,res,next) {
         req.body.image=req.file.path
-        req.body.date={date_start:req.body.date_start,date_end:req.body.date_end}
-
-        const movie =new Movie(req.body);
-       movie.save()
+        const news =new News(req.body);
+       news.save()
        .then(() => res.json(req.body))
        .catch(next)
        }
@@ -113,4 +81,4 @@ class MovieControllers {
 
 
 
-module.exports = new MovieControllers;
+module.exports = new NewsController;

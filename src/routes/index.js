@@ -6,7 +6,7 @@
  const theaterRoute = require('./theater');
  const movietimeRoute = require('./movietime');
  const ticketRoute = require('./ticket');
-
+ const newsRoute = require('./news')
 
 function route(app){
     app.use('/event',eventRoute); // trang sự kiện
@@ -14,7 +14,7 @@ function route(app){
     app.use('/account',accountRoute); // trang accout
     app.use('/movietime',movietimeRoute); // trang accout
     app.use('/ticket',ticketRoute); // trang accout
-
+    app.use('/news',newsRoute); // trang accout
     app.use('/gift',giftRoute); // trang gift
     app.use('/theater',theaterRoute); // trang theater
     app.use('/',homeRoute); // trang chủ showw all phim
