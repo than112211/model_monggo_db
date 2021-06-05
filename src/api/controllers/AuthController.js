@@ -9,18 +9,7 @@ const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGIRD_KEY)
 
 class AuthControllers{
-
-    
-    checkemail(req,res){
-        User.findOne({email:req.body.email},function(err,user){
-            if(user){
-                return true
-            }
-            else return false
-        })
         
-        
-    }
 // POST account/register
     register(req,res,next){
         // check email is registed
@@ -30,8 +19,6 @@ class AuthControllers{
         res.json({message:'Email đã tồn tại'})
                 }
             else{
-      
-
         bcrypt.hash(req.body.password,10,function(err,hashedPass){
             if(err){
                 res.json({message:'ko mã hóa đc mk'})
@@ -49,7 +36,7 @@ class AuthControllers{
             const msg = {
                 
                 to: user.email, // Change to your recipient
-                from: 'than123456qwe@gmail.com', // Change to your verified sender
+                from: 'thannguyenle77@gmail.com', // Change to your verified sender
                 subject: 'Xác minh tài khoản Le Do Cinema',      
                 html: `<h4>Xin chào ${req.body.name},</h4>
                 <p>Chúc mừng bạn trở thành thành viên Lê Độ Cinema - Tích điểm ngay nhận quà liền tay.

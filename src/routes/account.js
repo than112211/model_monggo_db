@@ -12,10 +12,10 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage:storage})
 
-router.post('/login',authControllers.login);
-router.post('/register',authControllers.register);
-router.get('/me',authControllers.me);
-router.post('/logout',authControllers.logout);
+router.post('/login',authControllers.login); // login
+router.post('/register',authControllers.register); //register
+router.get('/me',authControllers.me); // lấy user hiện tại
+router.post('/logout',authControllers.logout); // logout
 router.post('/logoutall',authControllers.logoutall);
 router.post('/changepassword',authControllers.changepassword);
 router.post('/resetpassword',authControllers.resetpassword); // yêu cầu cấp lại mk

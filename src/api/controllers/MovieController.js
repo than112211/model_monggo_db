@@ -3,20 +3,14 @@ const Movie = require('../models/Movie')
 
 
 class MovieControllers {
-
-
- 
-
     //get /movie/:slug
     show(req,res,next) {
         Movie.findOne({slug :req.params.slug})
-        // nhận về colecttion movie theo slug
         .then(movie =>  res.json(movie))
         .catch(next)
     }
     now(req,res,next) {
         Movie.find({playing :true})
-        // nhận về colecttion movie theo slug
         .then(movie =>  res.json(movie.splice(0,6)))
         .catch(next)
     }
@@ -26,7 +20,6 @@ class MovieControllers {
         const start = (page -1 ) * limit
         const end = page * limit
         Movie.find({playing :true})
-        // nhận về colecttion movie theo slug
         .then(movie => {
             res.json({
                 movie:movie.slice(start,end),

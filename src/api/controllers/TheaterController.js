@@ -30,7 +30,7 @@ class TheaterControllers {
     //POST /Theater/create      
     create(req,res,next) {
      const theater =new Theater(req.body);
-    theater.save()
+        theater.save()
     .then(() => res.json(req.body))
     .catch(next)
     }

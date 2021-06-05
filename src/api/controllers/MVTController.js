@@ -13,9 +13,43 @@ class MovietimeControllers {
             }
             else
             res.json({message:'Không tìm thấy'})
+        })  
+    }
+    date(req,res,next) {
+        Movietime.find({movie_id:req.params.id,theater_id:req.params.theater})
+        .then(movietime => {
+                if(movietime && movietime.length){
+                    const listDate = []
+                    for(let i = 0 ; i < movietime.length ; i++) {
+                        let date = new Date(movietime[i].movietime.date)
+                        date.setDate(date.getDate()+1)
+                        listDate.push(date)
+                        if(listDate.length === movietime.length){
+                            res.json(listDate)
+                        }
+
+                    }
+                }
+                else res.json(movietime)
         })
-     
-        
+    }
+
+    hour(req,res,next) {
+        Movietime.find({movie_id:req.params.id,theater_id:req.params.theater,"movietime.date": new Date(req.params.date.split('T').splice(0,1).toString().replace(/-/g,'/'))})
+        .then(movietime => {
+            if(movietime && movietime.length){
+                const listHour = []
+                for(let i = 0 ; i < movietime.length ; i++) {
+                    let date = movietime[i].movietime.hour
+                    listHour.push(date)
+                    if(listHour.length === movietime.length){
+                        res.json(listHour)
+                    }
+
+                }
+            }
+            else res.json(movietime)
+        })
     }
 
     // tạo Movietime
@@ -29,21 +63,16 @@ class MovietimeControllers {
             seat[i][j]={id:colume[i]+(j+1),available:false}
            }
        }
-
-    //     for(var i=0;i<req.body.movietime.times.length;i++){
-    //     req.body.movietime.times[i].seat=seat
-    // //    req.body.times[i] ={hour:req.body.hour[i],price:req.body.price[i],seat:seat}
-    // //     req.body.movietime={times:req.body.times.concat(req.body.times[i])}
-    //    }
     req.body.movietime={date:req.body.date,
                         hour:req.body.hour,
                         price:req.body.price,
                         seat:seat
                     }
     req.body.movie_id=req.params.id
+    req.body.theater_id=req.params.theater
         const movietime =new Movietime(req.body); 
             movietime.save()
-    .then(() => res.json(req.body))
+    .then(() => res.json(movietime))
     .catch(next)
     }
 
