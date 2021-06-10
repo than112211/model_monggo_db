@@ -3,18 +3,19 @@ const Schema = mongoose.Schema;
 const Ticket = Schema({
     id:Schema.Types.ObjectId,
     user_id:Schema.Types.ObjectId,
-    theater_id:Schema.Types.ObjectId,
-    numberticket:Number,
+    movietime_id:Schema.Types.ObjectId,
+    number:Number,
     namemovie:String,
     theater:String,
     date:Date,
     hour:String,
+    status:{type:Boolean,default:true},
     seat:[     
         String
     ],
     paid:Boolean,
-    total_price:Number,
-    code_gift:String,
+    price:Number,
+    gift:String,
 },
         {
         timestamps: true

@@ -51,6 +51,17 @@ class MovietimeControllers {
             else res.json(movietime)
         })
     }
+    getMovietime(req,res,next) {
+        console.log('da vao day')
+        Movietime.findOne({movie_id:req.params.id,
+            theater_id:req.params.theater,
+            "movietime.date": new Date(req.params.date.split('T').splice(0,1).toString().replace(/-/g,'/')),
+            "movietime.hour":req.params.hour
+        })
+        .then(movietime => {
+           res.json(movietime)
+        })
+    }
 
     // tạo Movietime
     //POST /Movietime/:id movie/create      
@@ -59,8 +70,8 @@ class MovietimeControllers {
     var seat=[]
        for(var i = 0;i<colume.length;i++){
         seat[i]=[]
-           for( var j=0;j<13;j++){
-            seat[i][j]={id:colume[i]+(j+1),available:false}
+           for( var j=0;j<12;j++){
+            seat[i][j]={id:colume[i]+(j+1),available:true}
            }
        }
     req.body.movietime={date:req.body.date,

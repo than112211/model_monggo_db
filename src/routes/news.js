@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage:storage})
 
-router.post('/create',upload.single('image'),newsController.create); // để lưu dữ liệu khi đăng phim mới
-router.get('/all/:number',newsController.all);
+router.post('/create',upload.single('image'),newsController.create); // tạo tin tức
+router.get('/all/:number',newsController.all); // lấy số lượng news
 
 module.exports = router;
