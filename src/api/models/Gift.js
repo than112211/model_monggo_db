@@ -5,6 +5,7 @@ const Gift= new Schema({
     id:Schema.Types.ObjectId,
     name :String,
     amount:Number,
+    description:String,
     code:[String],
     value : Number,
     available:Number,
@@ -13,7 +14,9 @@ const Gift= new Schema({
         date_start:Date,
         date_end:Date
     }
-
-
-});
+},
+{
+    timestamps: true
+  }
+);
 module.exports= mongoose.model('gift', Gift);

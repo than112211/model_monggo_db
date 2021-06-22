@@ -16,7 +16,7 @@ class AuthControllers{
         User.findOne({email:req.body.email})
         .then(user =>{
             if(user){
-        res.json({message:'Email đã tồn tại'})
+        res.status(201).json({message:'Email đã tồn tại'})
                 }
             else{
         bcrypt.hash(req.body.password,10,function(err,hashedPass){
@@ -32,19 +32,17 @@ class AuthControllers{
             formData.token = token                      
             const user = new User(formData)
             user.save()
-            // gữi email
             const msg = {
                 
                 to: user.email, // Change to your recipient
                 from: 'thannguyenle77@gmail.com', // Change to your verified sender
-                subject: 'Xác minh tài khoản Le Do Cinema',      
+                subject: 'Xác minh tài khoản CineStar Cinema',      
                 html: `<h4>Xin chào ${req.body.name},</h4>
-                <p>Chúc mừng bạn trở thành thành viên Lê Độ Cinema - Tích điểm ngay nhận quà liền tay.
-                Bạn có thể đăng nhập dễ dàng vào tài khoản Galaxy để cập nhập các chương trình ưu đãi đặc biệt dành riêng cho bạn </p>
-                <a href="http://${req.headers.host}/account/verify?token=${user.token}">Vui lòng nhấn vào đây để xác nhận</a>`,
+                <p>Chúc mừng bạn trở thành thành viên CineStar Cinema - Tích điểm ngay nhận quà liền tay.
+                Bạn có thể đăng nhập dễ dàng vào tài khoản Galaxy để cập nhập các chương trình ưu đãi đặc biệt dành riêng cho bạn </p>`,
               }
             sgMail.send(msg)
-            .then(() => res.json({message:'Đăng kí thành công',user:user,token:token}))
+            .then(() => res.status(200).json({message:'Đăng kí thành công',user:user,token:token}))
             .catch(next)          
         })
     }})
@@ -67,18 +65,18 @@ class AuthControllers{
                         //     if(user.token[i]=null){
                         user.token=user.token.concat(token)
                         user.save()
-                        res.json({message:'Đăng nhập thành công',user:user,token:token})
+                        res.status(200).json({message:'Đăng nhập thành công',user:user,token:token})
 
                     // }
                     // }
                                   
                     }
-                    else  res.json({message:'Mật khẩu sai'})
+                    else  res.status(201).json({message:'Mật khẩu sai'})
                 })
         
 
             }
-            else  res.json({message:'Không tìm thấy'})
+            else  res.status(202).json({message:'Không tìm thấy'})
         })
         .catch(next)
 
@@ -240,6 +238,92 @@ class AuthControllers{
         .catch(next)
          
      
+}
+getAll(req,res,next) {
+    const page = req.query.page
+    const limit = req.query.limit
+    const start = (page - 1 ) * limit
+    const end = page * limit
+    User.find({})
+    .then(user => {
+        res.json({
+            user:user.slice(start,end),
+            total:user.length
+        })
+    })
+    .catch(next)
+}
+
+getAllWeek(req,res,next) {
+    let d = new Date();
+    var day = d.getDay(),
+        diff = d.getDate() - day + (day == 0 ? -6:1); 
+    const date = new Date(d.setDate(diff));
+    console.log(date)
+    User.find({createdAt:{
+        $gte:date.toDateString()
+    }})
+    .then(user => {
+        res.json(user.length)
+    })
+    .catch(next)
+}
+getAllMonth(req,res,next) {
+    var date = new Date();
+    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    console.log(firstDay)
+     User.find({createdAt:{
+        $gte:firstDay
+    }})
+    .then(user => {
+        res.json(user.length)
+    })
+    .catch(next)
+}
+getAllYear(req,res,next) {
+    var date = new Date();
+    var firstDay = new Date(date.getFullYear(), 0 , 1);
+    console.log(new Date())
+    User.find({createdAt:{
+        $gte:firstDay
+    }})
+    .then(user => {
+        res.json(user.length)
+    })
+    .catch(next)
+}
+
+edit(req,res,next) {
+    console.log(req.body)
+    User.findOne({_id: req.params.id })
+    .then(user => {
+       if( req.body.password == user.password) {
+        User.updateOne({_id:req.params.id},req.body)
+        .then(() =>{
+            res.json('Đã cập nhật')
+        })
+        }
+        else {
+            bcrypt.hash(req.body.password,10,(err,hash) => {
+                req.body.date = new Date(req.body.date)
+                req.body.password = hash
+                User.updateOne({_id:req.params.id},req.body) 
+                .then(() => {
+                    res.json('Đã cập nhật')
+                })
+            })
+        
+       }
+    })
+    .catch(next)
+}
+
+delete(req,res,next) {
+    User.deleteOne({_id: req.params.id })
+    .then(() => {
+       res.json('Xóa thành công')
+    })
+    .catch(next)
 }
 }
 module.exports = new AuthControllers;

@@ -33,10 +33,16 @@ const User = Schema({
   
   isVerified:Boolean,
   gift_code:[{
+      name:String,
+      description:String,
       code:String,
       value:Number
   }],
-  avartar:String
+  avartar:String,
+  role:{type:Boolean,default:true}
 
-  })
+  },{
+    timestamps: true
+  }
+  )
   module.exports= mongoose.model('user', User);

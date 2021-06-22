@@ -7,23 +7,32 @@ class MovietimeControllers {
      //get /Movietime/:idmovie
      // lấy tất cả movietime theo id movie
      show(req,res,next) {
-        Movietime.find({movie_id:req.params.id},function(err,movietime){
-            if(!err)  {
-                res.json(movietime);
-            }
-            else
-            res.json({message:'Không tìm thấy'})
-        })  
-    }
+        const page = req.query.page
+        const limit = req.query.limit
+        const start = (page -1 ) * limit
+        const end = page * limit
+        Movietime.find({movie_id:req.query.movie,
+            theater_id:req.query.theater ? req.query.theater : {$ne:null},
+            "movietime.date" :req.query.date ? req.query.date : {$ne:null},
+            "movietime.hour":req.query.hour ? req.query.hour : {$ne:null},
+        })
+            .then(movietime => {
+                res.json({
+                    movie:movietime.slice(start,end),
+                    total:movietime.length
+                })
+            })
+            .catch(next)
+     }
     date(req,res,next) {
-        Movietime.find({movie_id:req.params.id,theater_id:req.params.theater})
+        Movietime.find({movie_id:req.params.id,theater_id:req.params.theater,"movietime.date":{
+            $gte: new Date(Date.now()).toDateString()
+        }})
         .then(movietime => {
                 if(movietime && movietime.length){
                     const listDate = []
                     for(let i = 0 ; i < movietime.length ; i++) {
-                        let date = new Date(movietime[i].movietime.date)
-                        date.setDate(date.getDate()+1)
-                        listDate.push(date)
+                        listDate.push(movietime[i].movietime.date)
                         if(listDate.length === movietime.length){
                             res.json(listDate)
                         }
@@ -35,7 +44,7 @@ class MovietimeControllers {
     }
 
     hour(req,res,next) {
-        Movietime.find({movie_id:req.params.id,theater_id:req.params.theater,"movietime.date": new Date(req.params.date.split('T').splice(0,1).toString().replace(/-/g,'/'))})
+        Movietime.find({movie_id:req.params.id,theater_id:req.params.theater,"movietime.date": req.params.date})
         .then(movietime => {
             if(movietime && movietime.length){
                 const listHour = []
@@ -55,7 +64,7 @@ class MovietimeControllers {
         console.log('da vao day')
         Movietime.findOne({movie_id:req.params.id,
             theater_id:req.params.theater,
-            "movietime.date": new Date(req.params.date.split('T').splice(0,1).toString().replace(/-/g,'/')),
+            "movietime.date":req.params.date,
             "movietime.hour":req.params.hour
         })
         .then(movietime => {
@@ -66,25 +75,36 @@ class MovietimeControllers {
     // tạo Movietime
     //POST /Movietime/:id movie/create      
     create(req,res,next) {     
-    var colume = ['A','B','C','D','E','F','G','H','I','J']
-    var seat=[]
-       for(var i = 0;i<colume.length;i++){
-        seat[i]=[]
-           for( var j=0;j<12;j++){
-            seat[i][j]={id:colume[i]+(j+1),available:true}
-           }
-       }
-    req.body.movietime={date:req.body.date,
-                        hour:req.body.hour,
-                        price:req.body.price,
-                        seat:seat
+        console.log(new Date(req.body.date))
+        console.log(new Date())
+        Movietime.findOne({movie_id:req.params.id,theater_id:req.params.theater,"movietime.hour":req.body.hour,"movietime.date":req.body.date})
+            .then(movietime =>{
+                if(movietime){
+                    res.status(201).json('Trùng giờ')
+                    console.log(movietime)
+                }
+                else {
+                    var colume = ['A','B','C','D','E','F','G','H','I','J']
+                     var seat=[]
+                for(var i = 0;i<colume.length;i++){
+                    seat[i]=[]
+                    for( var j=0;j<12;j++){
+                        seat[i][j]={id:colume[i]+(j+1),available:true}
                     }
-    req.body.movie_id=req.params.id
-    req.body.theater_id=req.params.theater
-        const movietime =new Movietime(req.body); 
-            movietime.save()
-    .then(() => res.json(movietime))
-    .catch(next)
+                }
+                req.body.movietime={date: req.body.date,
+                                    hour:req.body.hour,
+                                    price:req.body.price,
+                                    seat:seat
+                                }
+                req.body.movie_id=req.params.id
+                req.body.theater_id=req.params.theater
+                    const movietime =new Movietime(req.body); 
+                        movietime.save()
+                .then(() => res.status(200).json('Tạo thành công'))
+                .catch(next)
+                }
+            })
     }
 
 

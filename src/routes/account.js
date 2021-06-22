@@ -11,10 +11,15 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({storage:storage})
-
+router.delete('/delete/:id',authControllers.delete); // login
 router.post('/login',authControllers.login); // login
 router.post('/register',authControllers.register); //register
+router.post('/edit/:id',authControllers.edit); //register
 router.get('/me',authControllers.me); // lấy user hiện tại
+router.get('/all',authControllers.getAll); // lấy user hiện tại
+router.get('/all/week',authControllers.getAllWeek); // lấy user hiện tại
+router.get('/all/month',authControllers.getAllMonth); // lấy user hiện tại
+router.get('/all/year',authControllers.getAllYear); // lấy user hiện tại
 router.post('/logout',authControllers.logout); // logout
 router.post('/logoutall',authControllers.logoutall);
 router.post('/changepassword',authControllers.changepassword);
