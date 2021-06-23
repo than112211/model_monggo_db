@@ -6,9 +6,7 @@ const Theater = require('../models/Theater')
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
 const https = require('https');
-const crypto = require('crypto');
 const CryptoJS = require("crypto-js");
-const momo = require('../middleware/momo')
 const sgMail = require('@sendgrid/mail')
 const { v4: uuidv4 } = require('uuid');
 
