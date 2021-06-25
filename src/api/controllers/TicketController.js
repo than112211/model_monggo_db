@@ -129,15 +129,15 @@ class TicketControllers {
                                
                                
                             },300000)
-                            var rawSignature = "partnerCode="+process.env.PARTNER+"&accessKey="+process.env.ACCESSKEY+"&requestId="+ticket._id+"&amount="+ticket.price+"&orderId="+ticket._id+"&orderInfo=payment"+"&returnUrl=http://localhost:8080/ticket/result"+"&notifyUrl=http://localhost:8080/ticket/result"+"&extraData="
+                            var rawSignature = "partnerCode="+process.env.PARTNER+"&accessKey="+process.env.ACCESSKEY+"&requestId="+ticket._id+"&amount="+ticket.price+"&orderId="+ticket._id+"&orderInfo=payment"+"&returnUrl=https://naht-cinema-api.herokuapp.com/ticket/result"+"&notifyUrl=https://naht-cinema-api.herokuapp.com/ticket/result"+"&extraData="
                             var sign=  CryptoJS.HmacSHA256(rawSignature,process.env.SECRET_KEY)
                             var body=  JSON.stringify(
                             {
                                 "accessKey": process.env.ACCESSKEY,
                                 "partnerCode": process.env.PARTNER,
                                 "requestType": "captureMoMoWallet",
-                                "notifyUrl": "http://localhost:8080/ticket/result",
-                                "returnUrl": "http://localhost:8080/ticket/result",
+                                "notifyUrl": "https://naht-cinema-api.herokuapp.com/ticket/result",
+                                "returnUrl": "https://naht-cinema-api.herokuapp.com/ticket/result",
                                 "orderId": ticket._id,
                                 "amount": String(ticket.price),
                                 "orderInfo": "payment",
@@ -175,15 +175,15 @@ class TicketControllers {
     repaymentMoMo(req,response,next){
         console.log(req.body)
                             const id_oder = uuidv4()
-                            var rawSignature = "partnerCode="+process.env.PARTNER+"&accessKey="+process.env.ACCESSKEY+"&requestId="+req.body._id+"&amount="+req.body.price+"&orderId="+id_oder+"&orderInfo=payment"+"&returnUrl=http://localhost:8080/ticket/result"+"&notifyUrl=http://localhost:8080/ticket/result"+"&extraData="
+                            var rawSignature = "partnerCode="+process.env.PARTNER+"&accessKey="+process.env.ACCESSKEY+"&requestId="+req.body._id+"&amount="+req.body.price+"&orderId="+id_oder+"&orderInfo=payment"+"&returnUrl=https://naht-cinema-api.herokuapp.com/ticket/result"+"&notifyUrl=https://naht-cinema-api.herokuapp.com/ticket/result"+"&extraData="
                             var sign=  CryptoJS.HmacSHA256(rawSignature,process.env.SECRET_KEY)
                             var body=  JSON.stringify(
                             {
                                 "accessKey": process.env.ACCESSKEY,
                                 "partnerCode": process.env.PARTNER,
                                 "requestType": "captureMoMoWallet",
-                                "notifyUrl": "http://localhost:8080/ticket/result",
-                                "returnUrl": "http://localhost:8080/ticket/result",
+                                "notifyUrl": "https://naht-cinema-api.herokuapp.com/ticket/result",
+                                "returnUrl": "https://naht-cinema-api.herokuapp.com/ticket/result",
                                 "orderId": id_oder,
                                 "amount": String(req.body.price),
                                 "orderInfo": "payment",
@@ -234,7 +234,7 @@ class TicketControllers {
                         ticket.save()
                         user.point = user.point + point
                         user.save()
-                        res.redirect('http://localhost:4200/?payment=0')
+                        res.redirect('https://naht-cinema.herokuapp.com/?payment=0')
                         // const msg = {
                         //     to: user.email, // Change to your recipienttie
                         //     from: 'than123456qwe@gmail.com', // Change to your verified sender
@@ -254,7 +254,7 @@ class TicketControllers {
                         // sgMail.send(msg)
                          
                     }
-                    else                                      res.redirect('http://localhost:4200/?payment=1')
+                    else                                      res.redirect('https://naht-cinema.herokuapp.com/?payment=1')
 
 
                            
