@@ -11,7 +11,6 @@ const storage = multer.diskStorage({
     }
 })
 
-
 const upload = multer({storage:storage})
 router.get('/all',eventControllers.index); // lấy tất cả event
 router.post('/create',upload.array('image',2),eventControllers.create); // tạo event

@@ -29,9 +29,4 @@ router.get('/verify',authControllers.verify);
 router.put('/update',authControllers.update);
 router.put('/avartar',upload.single('avartar'),authControllers.avartar);
 
-
-
-
-
-
 module.exports = router;

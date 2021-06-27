@@ -1,4 +1,3 @@
- const homeRoute = require('./home');
  const movieRoute = require('./movies');
  const accountRoute = require('./account');
  const eventRoute = require('./event');
@@ -17,7 +16,6 @@ function route(app){
     app.use('/news',newsRoute); // trang tin tức
     app.use('/gift',giftRoute); // trang code gift
     app.use('/theater',theaterRoute); // trang theater
-    app.use('/',homeRoute); // trang chủ showw all phim
   
 }
  module.exports = route;

@@ -22,14 +22,7 @@ const storage =  new CloudinaryStorage({
     
 
 })
-// const storage = multer.diskStorage({
-//     destination: function(req,file,cb){
-//         cb(null, './src/resoures/')
-//     },
-//     filename:function(req,file,cb){
-//         cb(null,file.originalname)
-//     }
-// })
+
 const upload = multer({ storage: storage });
 router.post('/create',upload.fields([
     {name:'image',maxCount:1},
@@ -67,8 +60,5 @@ router.put('/edit/:id',upload.fields([
 
 router.put('/:id/playing',movieControllers.dangchieu); // chuyển phim sang trạng thái đang chiếu
 router.put('/:id/comming',movieControllers.sapchieu); // chuyển phim sang trạng thái sắp chiếu
-
-// nếu ghi slug (có thể dùng từ khác) thì khi vào controller thì param.slug
-
 
 module.exports = router;

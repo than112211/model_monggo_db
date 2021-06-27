@@ -7,12 +7,10 @@ class EventControllers {
      //get /event/:slug
      show(req,res,next) {
         Event.findOne({slug :req.params.slug})
-        // nhận về colecttion event theo slug
         .then(event =>  res.json(event))
         .catch(next)
     }
-
-    
+  
  // GET /event/all
     index(req, res,next) {
 
